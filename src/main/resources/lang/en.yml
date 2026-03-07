@@ -1,1 +1,5 @@
 ﻿addon: "Gantry"
+
+item:
+  rough_press_form:
+    name: "Rough Press Form"
