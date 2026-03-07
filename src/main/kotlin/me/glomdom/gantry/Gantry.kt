@@ -17,6 +17,7 @@ class Gantry : JavaPlugin(), RebarAddon {
         GantryItems.registerAll()
         GantryBlocks.registerAll()
         GantryPages.initialize()
+        GantryRecipes.registerAll()
     }
 
     companion object {

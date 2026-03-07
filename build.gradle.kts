@@ -32,6 +32,7 @@ sourceSets {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 
     maven("https://repo.papermc.io/repository/maven-public/") {
@@ -49,7 +50,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:$minecraftVersion-R0.1-SNAPSHOT")
-    compileOnly("io.github.pylonmc:rebar:$rebarVersion")
+    compileOnly("io.github.pylonmc:rebar:1.0.1-SNAPSHOT") // temporary until fix https://github.com/pylonmc/rebar/pull/655 is merged and a release with it is created
     compileOnly("io.github.pylonmc:pylon:$pylonVersion")
 }
 

@@ -8,4 +8,6 @@ object GantryKeys {
     val ROUGH_ROLLED_STRIP_FORM: NamespacedKey = gantryKey("rough_rolled_strip_form")
     val ROUGH_ROD_FORM: NamespacedKey = gantryKey("rough_rod_form")
     val ROUGH_FASTENER_PACK_FORM: NamespacedKey = gantryKey("rough_fastener_pack_form")
+
+    val HYDRAULIC_FORMING_PRESS: NamespacedKey = gantryKey("hydraulic_forming_press")
 }

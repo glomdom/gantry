@@ -17,6 +17,8 @@ fun main(args: Array<String>) {
             item("rough_rolled_strip_form", "Rough Rolled Strip Form")
             item("rough_rod_form", "Rough Rod Form")
             item("rough_fastener_pack_form", "Rough Fastener Pack Form")
+
+            item("hydraulic_forming_press", "Hydraulic Forming Press")
         }
 
         guide {
