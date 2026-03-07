@@ -1,5 +1,6 @@
 ﻿package me.glomdom.gantry.utils
 
+import io.github.pylonmc.rebar.block.RebarBlock
 import io.github.pylonmc.rebar.guide.pages.base.SimpleStaticGuidePage
 import io.github.pylonmc.rebar.item.RebarItem
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
@@ -13,10 +14,14 @@ object GantryUtils {
         return NamespacedKey(Gantry.instance, key)
     }
 
-    inline fun <reified TItem : RebarItem> gantryItem(mat: Material, key: NamespacedKey, page: SimpleStaticGuidePage): ItemStack {
-        return ItemStackBuilder.rebar(mat, key).build().also {
+    inline fun <reified TItem : RebarItem> gantryItem(material: Material, key: NamespacedKey, page: SimpleStaticGuidePage): ItemStack {
+        return ItemStackBuilder.rebar(material, key).build().also {
             RebarItem.register(TItem::class.java, it)
             page.addItem(it)
         }
+    }
+
+    inline fun <reified TBlock : RebarBlock> gantryBlock(material: Material, key: NamespacedKey) {
+        RebarBlock.register(key, material, TBlock::class.java)
     }
 }
