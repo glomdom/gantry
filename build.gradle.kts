@@ -19,6 +19,18 @@ val minecraftVersion = property("minecraft.version").toString()
 val rebarVersion = property("rebar.version").toString()
 val pylonVersion = property("pylon.version").toString()
 
+val generatedResourcesDir = layout.buildDirectory.dir("generated/gantry-resources/main")
+
+sourceSets {
+    create("datagen") {
+        kotlin.srcDirs("src/datagen/kotlin")
+        resources.srcDirs("src/datagen/resources")
+
+        compileClasspath += sourceSets["main"].compileClasspath + files(sourceSets["main"].output.classesDirs)
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
 repositories {
     mavenCentral()
 
@@ -41,6 +53,12 @@ dependencies {
     compileOnly("io.github.pylonmc:pylon:$pylonVersion")
 }
 
+configurations {
+    named("datagenImplementation") { extendsFrom(implementation.get()) }
+    named("datagenCompileOnly") { extendsFrom(compileOnly.get()) }
+    named("datagenRuntimeOnly") { extendsFrom(runtimeOnly.get()) }
+}
+
 idea {
     module {
         isDownloadJavadoc = true
@@ -55,6 +73,25 @@ kotlin {
         javaParameters = true
         jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
         freeCompilerArgs = listOf("-Xwhen-guards")
+    }
+}
+
+val runDatagen = tasks.register<JavaExec>("runDatagen") {
+    group = "datagen"
+    description = "Generates resource files for Gantry"
+
+    classpath = sourceSets["datagen"].runtimeClasspath
+    mainClass = "me.glomdom.gantry.datagen.MainKt"
+
+    val outDir = generatedResourcesDir.get().asFile
+    outputs.dir(outDir)
+
+    args(outDir.absolutePath)
+}
+
+sourceSets {
+    main {
+        resources.srcDir(runDatagen)
     }
 }
 
