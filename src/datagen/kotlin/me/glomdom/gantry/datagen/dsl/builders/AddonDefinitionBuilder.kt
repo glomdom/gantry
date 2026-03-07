@@ -6,7 +6,7 @@ import me.glomdom.gantry.datagen.dsl.definitions.GuidePageDefinition
 import me.glomdom.gantry.datagen.dsl.definitions.ItemDefinition
 
 @AddonDsl
-class AddonModelBuilder {
+class AddonDefinitionBuilder {
     private var addon: String? = null
     private val guidePages = mutableListOf<GuidePageDefinition>()
     private val items = mutableListOf<ItemDefinition>()
@@ -15,8 +15,8 @@ class AddonModelBuilder {
         addon = value
     }
 
-    fun guide(block: GuideBuilder.() -> Unit) {
-        guidePages += GuideBuilder().apply(block).build()
+    fun guide(block: PagesBuilder.() -> Unit) {
+        guidePages += PagesBuilder().apply(block).build()
     }
 
     fun items(block: ItemsBuilder.() -> Unit) {

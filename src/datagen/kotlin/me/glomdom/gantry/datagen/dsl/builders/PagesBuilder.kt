@@ -4,7 +4,7 @@ import me.glomdom.gantry.datagen.annotations.AddonDsl
 import me.glomdom.gantry.datagen.dsl.definitions.GuidePageDefinition
 
 @AddonDsl
-class GuideBuilder {
+class PagesBuilder {
     private val pages = mutableListOf<GuidePageDefinition>()
 
     fun page(id: String, title: String) {
