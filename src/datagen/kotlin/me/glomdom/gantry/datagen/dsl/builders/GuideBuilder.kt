@@ -1,7 +1,7 @@
 ﻿package me.glomdom.gantry.datagen.dsl.builders
 
 import me.glomdom.gantry.datagen.annotations.AddonDsl
-import me.glomdom.gantry.datagen.dsl.GuidePageDefinition
+import me.glomdom.gantry.datagen.dsl.definitions.GuidePageDefinition
 
 @AddonDsl
 class GuideBuilder {

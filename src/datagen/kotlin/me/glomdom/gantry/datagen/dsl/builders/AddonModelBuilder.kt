@@ -1,9 +1,9 @@
 ﻿package me.glomdom.gantry.datagen.dsl.builders
 
 import me.glomdom.gantry.datagen.annotations.AddonDsl
-import me.glomdom.gantry.datagen.dsl.AddonModel
-import me.glomdom.gantry.datagen.dsl.GuidePageDefinition
-import me.glomdom.gantry.datagen.dsl.ItemDefinition
+import me.glomdom.gantry.datagen.dsl.definitions.AddonDefinition
+import me.glomdom.gantry.datagen.dsl.definitions.GuidePageDefinition
+import me.glomdom.gantry.datagen.dsl.definitions.ItemDefinition
 
 @AddonDsl
 class AddonModelBuilder {
@@ -23,9 +23,9 @@ class AddonModelBuilder {
         items += ItemsBuilder().apply(block).build()
     }
 
-    fun build(): AddonModel {
-        return AddonModel(
-            addon = requireNotNull(addon) { "Missing addon name" },
+    fun build(): AddonDefinition {
+        return AddonDefinition(
+            name = requireNotNull(addon) { "Missing addon name" },
             guidePages = guidePages,
             items = items
         )

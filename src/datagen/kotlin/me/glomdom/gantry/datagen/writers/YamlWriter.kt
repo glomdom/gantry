@@ -1,10 +1,10 @@
 ﻿package me.glomdom.gantry.datagen.writers
 
-import me.glomdom.gantry.datagen.dsl.AddonModel
+import me.glomdom.gantry.datagen.dsl.definitions.AddonDefinition
 import java.nio.file.Files
 import java.nio.file.Path
 
-class YamlWriter(private val model: AddonModel) {
+class YamlWriter(private val addonDefinition: AddonDefinition) {
     fun writeTo(root: Path) {
         val file = root.resolve("lang/en.yml")
 
@@ -13,17 +13,17 @@ class YamlWriter(private val model: AddonModel) {
     }
 
     private fun buildYaml(): String = buildString {
-        appendLine("addon: \"${model.addon}\"")
+        appendLine("addon: \"${addonDefinition.name}\"")
         appendLine("guide:")
         appendLine("  page:")
 
-        for (page in model.guidePages) {
+        for (page in addonDefinition.guidePages) {
             appendLine("    ${page.id}: \"${page.title}\"")
         }
 
         appendLine("item:")
 
-        for (item in model.items) {
+        for (item in addonDefinition.items) {
             appendLine("  ${item.id}:")
             appendLine("    name: \"${item.name}\"")
 

@@ -1,7 +1,7 @@
 ﻿package me.glomdom.gantry.datagen.dsl.builders
 
 import me.glomdom.gantry.datagen.annotations.AddonDsl
-import me.glomdom.gantry.datagen.dsl.ItemDefinition
+import me.glomdom.gantry.datagen.dsl.definitions.ItemDefinition
 
 @AddonDsl
 class ItemsBuilder {
