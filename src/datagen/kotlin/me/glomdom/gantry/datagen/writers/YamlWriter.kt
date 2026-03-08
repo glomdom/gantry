@@ -1,18 +1,24 @@
 ﻿package me.glomdom.gantry.datagen.writers
 
 import me.glomdom.gantry.datagen.dsl.definitions.AddonDefinition
+import me.glomdom.gantry.datagen.dsl.definitions.SettingsDefinition
 import java.nio.file.Files
 import java.nio.file.Path
 
 class YamlWriter(private val addonDefinition: AddonDefinition) {
     fun writeTo(root: Path) {
-        val file = root.resolve("lang/en.yml")
+        val translationsPath = root.resolve("lang/en.yml")
 
-        Files.createDirectories(file.parent)
-        Files.writeString(file, buildYaml())
+        Files.createDirectories(translationsPath.parent)
+        Files.createDirectories(root.resolve("settings/"))
+        Files.writeString(translationsPath, buildTranslationYml())
+
+        for (settingsDefinition in addonDefinition.settings) {
+            Files.writeString(root.resolve("settings/${settingsDefinition.key}.yml"), buildSettingsYml(settingsDefinition))
+        }
     }
 
-    private fun buildYaml(): String = buildString {
+    private fun buildTranslationYml(): String = buildString {
         appendLine("addon: \"${addonDefinition.name}\"")
         appendLine("guide:")
         appendLine("  page:")
@@ -32,6 +38,24 @@ class YamlWriter(private val addonDefinition: AddonDefinition) {
             appendLine("    lore: |-")
             for (loreLine in item.lore) {
                 appendLine("      $loreLine")
+            }
+        }
+    }
+
+    private fun buildSettingsYml(settingsDefinition: SettingsDefinition): String = buildString {
+        for (entry in settingsDefinition.entries) {
+            when (val value = entry.value!!) {
+                is String -> {
+                    appendLine("${entry.key}: \"$value\"")
+                }
+
+                is Number -> {
+                    appendLine("${entry.key}: $value")
+                }
+
+                else -> {
+                    error("Unsupported settings entry value type for key `${entry.key}`: ${value::class.qualifiedName}")
+                }
             }
         }
     }

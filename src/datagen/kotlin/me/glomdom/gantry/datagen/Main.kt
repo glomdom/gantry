@@ -24,6 +24,11 @@ fun main(args: Array<String>) {
         guide {
             page("pressing", "Pressing")
         }
+
+        settings("hydraulic_forming_press") {
+            number("tick-interval", 20)
+            number("buffer-amount", 200)
+        }
     }
 
     YamlWriter(model).writeTo(outDir)
