@@ -9,20 +9,34 @@ import io.github.pylonmc.rebar.block.base.RebarTickingBlock
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
 import io.github.pylonmc.rebar.config.adapter.ConfigAdapter
 import io.github.pylonmc.rebar.fluid.FluidPointType
+import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.RebarItem
+import io.github.pylonmc.rebar.util.gui.unit.UnitFormat
 import me.glomdom.gantry.content.recipes.HydraulicFormingPressRecipe
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataContainer
 
-class HydraulicFormingPress : RebarBlock, RebarDirectionalBlock, RebarFluidBufferBlock, RebarTickingBlock,
+class HydraulicFormingPress :
+    RebarBlock,
+    RebarDirectionalBlock,
+    RebarFluidBufferBlock,
+    RebarTickingBlock,
     RebarRecipeProcessor<HydraulicFormingPressRecipe> {
 
     val tickingInterval = getSettings().getOrThrow("tick-interval", ConfigAdapter.INTEGER)
     val fluidBufferAmount = getSettings().getOrThrow("buffer-amount", ConfigAdapter.DOUBLE)
 
-    class Item(stack: ItemStack) : RebarItem(stack) {}
+    class Item(stack: ItemStack) : RebarItem(stack) {
+        val fluidBufferAmount = getSettings().getOrThrow("buffer-amount", ConfigAdapter.DOUBLE)
+
+        override fun getPlaceholders(): List<RebarArgument> {
+            return listOf(
+                RebarArgument.of("buffer", UnitFormat.MILLIBUCKETS.format(fluidBufferAmount))
+            )
+        }
+    }
 
     @Suppress("Unused")
     constructor(block: Block, context: BlockCreateContext) : super(block, context) {
