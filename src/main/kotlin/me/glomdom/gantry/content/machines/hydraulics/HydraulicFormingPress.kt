@@ -98,7 +98,7 @@ class HydraulicFormingPress :
             .addIngredient('p', recipeProgressItem)
             .addIngredient('O', GuiItems.output())
             .addIngredient('o', itemOutputInventory)
-            .build();
+            .build()
     }
 
     override fun onBreak(drops: MutableList<ItemStack>, context: BlockBreakContext) {

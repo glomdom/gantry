@@ -8,7 +8,6 @@ import io.github.pylonmc.rebar.recipe.RebarRecipe
 import io.github.pylonmc.rebar.recipe.RecipeInput
 import io.github.pylonmc.rebar.util.gui.GuiItems
 import me.glomdom.gantry.GantryKeys
-import me.glomdom.gantry.utils.GantryUtils.gantryKey
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import xyz.xenondevs.invui.gui.Gui
