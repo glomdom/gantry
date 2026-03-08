@@ -7,6 +7,7 @@ import io.github.pylonmc.rebar.recipe.FluidOrItem
 import io.github.pylonmc.rebar.recipe.RebarRecipe
 import io.github.pylonmc.rebar.recipe.RecipeInput
 import io.github.pylonmc.rebar.util.gui.GuiItems
+import me.glomdom.gantry.GantryKeys
 import me.glomdom.gantry.utils.GantryUtils.gantryKey
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -38,7 +39,7 @@ class HydraulicFormingPressRecipe(val recipeKey: NamespacedKey, val input: Recip
         recipeKey
 
     companion object {
-        val RECIPE_TYPE = object : ConfigurableRecipeType<HydraulicFormingPressRecipe>(gantryKey("hydraulic_forming_press")) {
+        val RECIPE_TYPE = object : ConfigurableRecipeType<HydraulicFormingPressRecipe>(GantryKeys.HYDRAULIC_FORMING_PRESS) {
             override fun loadRecipe(
                 key: NamespacedKey,
                 section: ConfigSection
