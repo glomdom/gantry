@@ -7,7 +7,7 @@ import me.glomdom.gantry.datagen.dsl.definitions.SettingsStringEntryDefinition
 
 @AddonDsl
 class SettingsBuilder {
-    val entries = mutableListOf<SettingsEntryDefinition<*>>()
+    private val entries = mutableListOf<SettingsEntryDefinition<*>>()
 
     fun string(key: String, value: String) {
         entries += SettingsStringEntryDefinition(key, value)

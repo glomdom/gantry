@@ -7,8 +7,8 @@ import me.glomdom.gantry.datagen.dsl.definitions.ItemDefinition
 class ItemsBuilder {
     private val items = mutableListOf<ItemDefinition>()
 
-    fun item(id: String, name: String, lore: List<String> = emptyList()) {
-        items += ItemDefinition(id, name, lore)
+    fun item(id: String, name: String, block: ItemBuilder.() -> Unit = {}) {
+        items += ItemBuilder(id, name).apply(block).build()
     }
 
     fun build(): List<ItemDefinition> = items
