@@ -27,6 +27,13 @@ class YamlWriter(private val addonDefinition: AddonDefinition) {
             appendLine("    ${page.id}: \"${page.title}\"")
         }
 
+        appendLine("gui:")
+        for (guiDefinition in addonDefinition.guis) {
+            for (item in guiDefinition.items) {
+                appendLine("  ${item.id}: \"${item.name}\"")
+            }
+        }
+
         appendLine("item:")
 
         for (item in addonDefinition.items) {

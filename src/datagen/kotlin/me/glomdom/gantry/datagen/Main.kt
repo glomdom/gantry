@@ -28,6 +28,10 @@ fun main(args: Array<String>) {
             page("pressing", "Pressing")
         }
 
+        gui {
+            item("form_input", "Form Input")
+        }
+
         settings("hydraulic_forming_press") {
             number("tick-interval", 20)
             number("buffer-amount", 200)

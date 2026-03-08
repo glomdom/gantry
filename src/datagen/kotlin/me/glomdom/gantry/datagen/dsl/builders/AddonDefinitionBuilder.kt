@@ -2,6 +2,7 @@
 
 import me.glomdom.gantry.datagen.annotations.AddonDsl
 import me.glomdom.gantry.datagen.dsl.definitions.AddonDefinition
+import me.glomdom.gantry.datagen.dsl.definitions.GuiDefinition
 import me.glomdom.gantry.datagen.dsl.definitions.GuidePageDefinition
 import me.glomdom.gantry.datagen.dsl.definitions.ItemDefinition
 import me.glomdom.gantry.datagen.dsl.definitions.SettingsDefinition
@@ -12,6 +13,7 @@ class AddonDefinitionBuilder {
     private val guidePages = mutableListOf<GuidePageDefinition>()
     private val items = mutableListOf<ItemDefinition>()
     private val settings = mutableListOf<SettingsDefinition>()
+    private val guis = mutableListOf<GuiDefinition>()
 
     fun addon(value: String) {
         addon = value
@@ -23,6 +25,10 @@ class AddonDefinitionBuilder {
 
     fun items(block: ItemsBuilder.() -> Unit) {
         items += ItemsBuilder().apply(block).build()
+    }
+
+    fun gui(block: GuiBuilder.() -> Unit) {
+        guis += GuiBuilder().apply(block).build()
     }
 
     fun settings(key: String, block: SettingsBuilder.() -> Unit) {
@@ -38,6 +44,7 @@ class AddonDefinitionBuilder {
             guidePages = guidePages,
             items = items,
             settings = settings,
+            guis = guis
         )
     }
 }
