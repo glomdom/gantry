@@ -14,6 +14,7 @@ fun main(args: Array<String>) {
 
         items {
             item("rough_press_form", "Rough Press Form")
+            item("spent_rough_form", "Spent Rough Form")
             item("rough_rolled_strip_form", "Rough Rolled Strip Form")
             item("rough_rod_form", "Rough Rod Form")
             item("rough_fastener_pack_form", "Rough Fastener Pack Form")

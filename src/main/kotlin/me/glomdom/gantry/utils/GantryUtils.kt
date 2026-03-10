@@ -43,4 +43,10 @@ object GantryUtils {
     inline fun <reified TBlock : RebarBlock> gantryBlock(material: Material, key: NamespacedKey) {
         RebarBlock.register(key, material, TBlock::class.java)
     }
+
+    inline fun <reified TItem : RebarItem> anyStackIsNot(vararg stacks: ItemStack?): Boolean {
+        return stacks
+            .mapNotNull(RebarItem::from)
+            .any { it !is TItem }
+    }
 }

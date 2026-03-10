@@ -5,6 +5,7 @@ import org.bukkit.NamespacedKey
 
 object GantryKeys {
     val ROUGH_PRESS_FORM: NamespacedKey = gantryKey("rough_press_form")
+    val SPENT_ROUGH_FORM: NamespacedKey = gantryKey("spent_rough_form")
     val ROUGH_ROLLED_STRIP_FORM: NamespacedKey = gantryKey("rough_rolled_strip_form")
     val ROUGH_ROD_FORM: NamespacedKey = gantryKey("rough_rod_form")
     val ROUGH_FASTENER_PACK_FORM: NamespacedKey = gantryKey("rough_fastener_pack_form")

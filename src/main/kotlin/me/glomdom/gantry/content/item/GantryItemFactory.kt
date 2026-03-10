@@ -1,4 +1,4 @@
-﻿package me.glomdom.gantry.item
+﻿package me.glomdom.gantry.content.item
 
 import io.github.pylonmc.rebar.guide.pages.base.SimpleStaticGuidePage
 import io.github.pylonmc.rebar.item.RebarItem
