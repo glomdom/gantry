@@ -3,6 +3,7 @@
 import io.github.pylonmc.pylon.PylonPages
 import io.github.pylonmc.rebar.item.RebarItem
 import me.glomdom.gantry.content.machines.hydraulics.HydraulicFormingPress
+import me.glomdom.gantry.item.GantryItemFactory
 import me.glomdom.gantry.utils.GantryUtils.gantryBlockItem
 import me.glomdom.gantry.utils.GantryUtils.gantryItem
 import org.bukkit.Material
@@ -16,11 +17,26 @@ object GantryItems {
     lateinit var HYDRAULIC_FORMING_PRESS: ItemStack private set
 
     fun registerAll() {
-        ROUGH_PRESS_FORM = gantryItem<RebarItem>(Material.CLAY_BALL, GantryKeys.ROUGH_PRESS_FORM, GantryPages.PRESSING)
-        ROUGH_ROLLED_STRIP_FORM = gantryItem<RebarItem>(Material.GRAY_CARPET, GantryKeys.ROUGH_ROLLED_STRIP_FORM, GantryPages.PRESSING)
-        ROUGH_ROD_FORM = gantryItem<RebarItem>(Material.GRAY_CARPET, GantryKeys.ROUGH_ROD_FORM, GantryPages.PRESSING)
-        ROUGH_FASTENER_PACK_FORM = gantryItem<RebarItem>(Material.GRAY_CARPET, GantryKeys.ROUGH_FASTENER_PACK_FORM, GantryPages.PRESSING)
+        ROUGH_PRESS_FORM =
+            GantryItemFactory.create(Material.CLAY_BALL, GantryKeys.ROUGH_PRESS_FORM, GantryPages.PRESSING)
+                .durability(25)
+                .build(RebarItem::class.java)
 
-        HYDRAULIC_FORMING_PRESS = gantryBlockItem<HydraulicFormingPress.Item>(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS, PylonPages.HYDRAULIC_MACHINES)
+        ROUGH_ROLLED_STRIP_FORM =
+            GantryItemFactory.create(Material.GRAY_CARPET, GantryKeys.ROUGH_ROLLED_STRIP_FORM, GantryPages.PRESSING)
+                .build(RebarItem::class.java)
+
+        ROUGH_ROD_FORM =
+            GantryItemFactory.create(Material.GRAY_CARPET, GantryKeys.ROUGH_ROD_FORM, GantryPages.PRESSING)
+                .build(RebarItem::class.java)
+
+        ROUGH_FASTENER_PACK_FORM =
+            GantryItemFactory.create(Material.GRAY_CARPET, GantryKeys.ROUGH_FASTENER_PACK_FORM, GantryPages.PRESSING)
+                .build(RebarItem::class.java)
+
+        HYDRAULIC_FORMING_PRESS =
+            GantryItemFactory.create(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS, PylonPages.HYDRAULIC_MACHINES)
+                .asBlockItem()
+                .build(HydraulicFormingPress.Item::class.java)
     }
 }

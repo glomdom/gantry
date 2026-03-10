@@ -21,6 +21,18 @@ object GantryUtils {
         }
     }
 
+    inline fun <reified TItem : RebarItem> gantryItemWithDurability(
+        material: Material,
+        key: NamespacedKey,
+        page: SimpleStaticGuidePage,
+        durability: Int
+    ): ItemStack {
+        return ItemStackBuilder.rebar(material, key).durability(durability).build().also {
+            RebarItem.register(TItem::class.java, it)
+            page.addItem(it)
+        }
+    }
+
     inline fun <reified TItem : RebarItem> gantryBlockItem(material: Material, key: NamespacedKey, page: SimpleStaticGuidePage): ItemStack {
         return ItemStackBuilder.rebar(material, key).build().also {
             RebarItem.register(TItem::class.java, it, key)
