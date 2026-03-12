@@ -22,6 +22,8 @@ fun main(args: Array<String>) {
             item("hydraulic_forming_press", "Hydraulic Forming Press") {
                 lore("<arrow> Forms metals into forms using the power of hydraulics")
                 lore("<arrow> <attr>Buffer:</attr> %buffer%")
+
+                waila("Hydraulic Forming Press | %input-bar% | %output-bar%")
             }
         }
 
@@ -34,7 +36,7 @@ fun main(args: Array<String>) {
         }
 
         settings("hydraulic_forming_press") {
-            number("tick-interval", 20)
+            number("tick-interval", 5)
             number("buffer-amount", 200)
         }
     }

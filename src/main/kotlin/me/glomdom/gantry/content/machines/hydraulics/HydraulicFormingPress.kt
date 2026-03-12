@@ -16,15 +16,18 @@ import io.github.pylonmc.rebar.config.adapter.ConfigAdapter
 import io.github.pylonmc.rebar.fluid.FluidPointType
 import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.RebarItem
+import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import io.github.pylonmc.rebar.logistics.LogisticGroupType
 import io.github.pylonmc.rebar.logistics.slot.VirtualInventoryLogisticSlot
 import io.github.pylonmc.rebar.util.DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER
+import io.github.pylonmc.rebar.util.MachineUpdateReason
 import io.github.pylonmc.rebar.util.damageItem
 import io.github.pylonmc.rebar.util.gui.GuiItems
 import io.github.pylonmc.rebar.util.gui.ProgressItem
 import io.github.pylonmc.rebar.util.gui.unit.UnitFormat
 import io.github.pylonmc.rebar.waila.WailaDisplay
 import me.glomdom.gantry.Gantry
+import me.glomdom.gantry.GantryItems
 import me.glomdom.gantry.content.item.forms.RoughBaseForm
 import me.glomdom.gantry.content.recipes.HydraulicFormingPressRecipe
 import me.glomdom.gantry.utils.GantryGuiItems
@@ -68,6 +71,9 @@ class HydraulicFormingPress :
     @Suppress("Unused")
     constructor(block: Block, context: BlockCreateContext) : super(block, context) {
         setTickInterval(tickingInterval)
+
+        Gantry.instance.logger.info("Got tick $tickingInterval for $key")
+
         setRecipeType(HydraulicFormingPressRecipe.RECIPE_TYPE)
 
         createFluidBuffer(PylonFluids.HYDRAULIC_FLUID, fluidBufferAmount, input = true, output = false)
@@ -91,12 +97,22 @@ class HydraulicFormingPress :
 
         itemOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
         formInputOutputInventory.addPreUpdateHandler { event ->
+            if (event.updateReason is MachineUpdateReason) {
+                return@addPreUpdateHandler
+            }
+
             if (anyStackIsNot<RoughBaseForm>(event.newItem, event.previousItem)) {
                 event.isCancelled = true
             }
         }
 
-//        itemOutputInventory.addPostUpdateHandler { event -> tryStartRecipe(); }
+        itemOutputInventory.addPostUpdateHandler { _ -> tryStartRecipe(); }
+        formInputOutputInventory.addPostUpdateHandler { _ -> tryStartRecipe(); }
+        itemInputInventory.addPostUpdateHandler { event ->
+            if (event.updateReason !is MachineUpdateReason) {
+                tryStartRecipe()
+            }
+        }
     }
 
     override fun createGui(): Gui {
@@ -123,14 +139,38 @@ class HydraulicFormingPress :
     }
 
     override fun tick() {
-//        damageItem()
+        if (!isProcessingRecipe) {
+            return
+        }
+
+        formInputOutputInventory.getItem(0) ?: return
+
+        val fluidAmountRequired = currentRecipe!!.fluidPerSecond * tickingInterval / 20;
+        if (currentRecipe != null && (fluidAmount(PylonFluids.HYDRAULIC_FLUID) < fluidAmountRequired || fluidAmount(PylonFluids.DIRTY_HYDRAULIC_FLUID) == fluidBufferAmount)) {
+            return
+        }
+
+        removeFluid(PylonFluids.HYDRAULIC_FLUID, fluidAmountRequired)
+        addFluid(PylonFluids.DIRTY_HYDRAULIC_FLUID, fluidAmountRequired)
+        progressRecipe(tickingInterval)
     }
 
     override fun onRecipeFinished(recipe: HydraulicFormingPressRecipe) {
         recipeProgressItem.setItem(GuiItems.background())
+        itemOutputInventory.addItem(MachineUpdateReason(), recipe.output.clone())
 
-        damageItem(formInputOutputInventory.getItem(0)!!, 1, block.world)
-        val form = formInputOutputInventory.getItem(0)!! as RoughBaseForm;
+        val form = formInputOutputInventory.getItem(0) ?: return
+
+        var broke = false
+        damageItem(form, 1, block.world, onBreak = {
+            broke = true
+
+            formInputOutputInventory.setItem(MachineUpdateReason(), 0, GantryItems.SPENT_ROUGH_FORM.clone())
+        }, force = true)
+
+        if (!broke) {
+            formInputOutputInventory.setItem(MachineUpdateReason(), 0, form)
+        }
     }
 
     override fun getWaila(player: Player): WailaDisplay {
@@ -158,9 +198,38 @@ class HydraulicFormingPress :
 
     override fun getVirtualInventories(): Map<String, VirtualInventory> {
         return mapOf(
-            "item-input" to itemInputInventory,
+            "input" to itemInputInventory,
             "form-input-output" to formInputOutputInventory,
-            "item-output" to itemOutputInventory,
+            "output" to itemOutputInventory,
         )
+    }
+
+    fun tryStartRecipe() {
+        if (isProcessingRecipe) return;
+
+        val stack = itemInputInventory.getItem(0) ?: return
+        val form = formInputOutputInventory.getItem(0) ?: return
+
+        for (recipe in HydraulicFormingPressRecipe.RECIPE_TYPE) {
+            if (!recipe.input.isSimilar(stack) ||
+                !matchesForm(recipe.form, form) ||
+                !itemOutputInventory.canHold(recipe.output)
+            ) {
+                continue
+            }
+
+            startRecipe(recipe, 80)
+            recipeProgressItem.setItem(ItemStackBuilder.of(currentRecipe!!.output.asOne()).clearLore())
+            itemInputInventory.setItem(MachineUpdateReason(), 0, stack.subtract(recipe.input.amount))
+
+            break
+        }
+    }
+
+    fun matchesForm(recipeForm: ItemStack, actualForm: ItemStack): Boolean {
+        val recipeItem = RebarItem.fromStack(recipeForm)
+        val actualItem = RebarItem.fromStack(actualForm)
+
+        return recipeItem != null && actualItem != null && recipeItem::class == actualItem::class
     }
 }

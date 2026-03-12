@@ -40,11 +40,15 @@ class YamlWriter(private val addonDefinition: AddonDefinition) {
             appendLine("  ${item.id}:")
             appendLine("    name: \"${item.name}\"")
 
-            if (item.lore.isEmpty()) continue
+            if (item.lore.isNotEmpty()) {
+                appendLine("    lore: |-")
+                for (loreLine in item.lore) {
+                    appendLine("      $loreLine")
+                }
+            }
 
-            appendLine("    lore: |-")
-            for (loreLine in item.lore) {
-                appendLine("      $loreLine")
+            if (item.waila.isNotEmpty()) {
+                appendLine("    waila: ${item.waila}")
             }
         }
     }

@@ -1,0 +1,6 @@
+﻿pylon:bronze_ingot_sex:
+  input: "minecraft:oak_log"
+  output:
+    pylon:bronze_ingot: 4
+  fluid-per-second: 100
+  form: "gantry:rough_rod_form"
