@@ -145,7 +145,7 @@ class HydraulicFormingPress :
 
         formInputOutputInventory.getItem(0) ?: return
 
-        val fluidAmountRequired = currentRecipe!!.fluidPerSecond * tickingInterval / 20;
+        val fluidAmountRequired = currentRecipe!!.fluidPerSecond * tickingInterval / 20
         if (currentRecipe != null && (fluidAmount(PylonFluids.HYDRAULIC_FLUID) < fluidAmountRequired || fluidAmount(PylonFluids.DIRTY_HYDRAULIC_FLUID) == fluidBufferAmount)) {
             return
         }
@@ -205,7 +205,7 @@ class HydraulicFormingPress :
     }
 
     fun tryStartRecipe() {
-        if (isProcessingRecipe) return;
+        if (isProcessingRecipe) return
 
         val stack = itemInputInventory.getItem(0) ?: return
         val form = formInputOutputInventory.getItem(0) ?: return
