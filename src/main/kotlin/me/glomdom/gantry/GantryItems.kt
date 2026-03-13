@@ -6,16 +6,23 @@ import me.glomdom.gantry.content.machines.hydraulics.HydraulicFormingPress
 import me.glomdom.gantry.content.item.GantryItemFactory
 import me.glomdom.gantry.content.item.forms.RoughBaseForm
 import me.glomdom.gantry.content.item.forms.RoughRolledStripForm
+import me.glomdom.gantry.utils.GantryUtils.gantryItem
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
 object GantryItems {
     lateinit var ROUGH_PRESS_FORM: ItemStack private set
     lateinit var SPENT_ROUGH_FORM: ItemStack private set
+
     lateinit var ROUGH_ROLLED_STRIP_FORM: ItemStack private set
     lateinit var ROUGH_ROD_FORM: ItemStack private set
     lateinit var ROUGH_FASTENER_PACK_FORM: ItemStack private set
+
     lateinit var HYDRAULIC_FORMING_PRESS: ItemStack private set
+
+    lateinit var ROUGH_IRON_ROD: ItemStack private set
+    lateinit var ROUGH_IRON_ROLLED_STRIP: ItemStack private set
+    lateinit var ROUGH_FASTENER_PACK: ItemStack private set
 
     fun registerAll() {
         ROUGH_PRESS_FORM =
@@ -40,6 +47,10 @@ object GantryItems {
             GantryItemFactory.create(Material.GRAY_CARPET, GantryKeys.ROUGH_FASTENER_PACK_FORM, GantryPages.PRESSING)
                 .durability(25)
                 .build(RoughBaseForm::class.java)
+
+        ROUGH_IRON_ROD = gantryItem<RebarItem>(Material.COBBLED_DEEPSLATE_WALL, GantryKeys.ROUGH_IRON_ROD, PylonPages.COMPONENTS)
+        ROUGH_IRON_ROLLED_STRIP = gantryItem<RebarItem>(Material.IRON_CHAIN, GantryKeys.ROUGH_IRON_ROLLED_STRIP, PylonPages.COMPONENTS)
+        ROUGH_FASTENER_PACK = gantryItem<RebarItem>(Material.TRIPWIRE_HOOK, GantryKeys.ROUGH_FASTENER_PACK, PylonPages.COMPONENTS)
 
         HYDRAULIC_FORMING_PRESS =
             GantryItemFactory.create(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS, PylonPages.HYDRAULIC_MACHINES)

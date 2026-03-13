@@ -19,6 +19,10 @@ fun main(args: Array<String>) {
             item("rough_rod_form", "Rough Rod Form")
             item("rough_fastener_pack_form", "Rough Fastener Pack Form")
 
+            item("rough_iron_rod", "Rough Iron Rod")
+            item("rough_iron_rolled_strip", "Rough Iron Rolled Strip")
+            item("rough_fastener_pack", "Rough Fastener Pack")
+
             item("hydraulic_forming_press", "Hydraulic Forming Press") {
                 lore("<arrow> Forms metals into forms using the power of hydraulics")
                 lore("<arrow> <attr>Buffer:</attr> %buffer%")
