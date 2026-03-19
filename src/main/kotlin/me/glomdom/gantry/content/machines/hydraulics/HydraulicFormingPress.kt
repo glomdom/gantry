@@ -95,11 +95,9 @@ class HydraulicFormingPress :
         createLogisticGroup("byproduct-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(byproductOutputInventory, 0))
 
         itemOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
-        formInputOutputInventory.addPreUpdateHandler { event ->
-            if (event.updateReason is MachineUpdateReason) {
-                return@addPreUpdateHandler
-            }
+        byproductOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
 
+        formInputOutputInventory.addPreUpdateHandler { event ->
             if (anyStackIsNot<RoughBaseForm>(event.newItem, event.previousItem)) {
                 event.isCancelled = true
             }
@@ -210,7 +208,6 @@ class HydraulicFormingPress :
             recipeProgressItem.setItem(ItemStackBuilder.of(currentRecipe!!.output.asOne()).clearLore())
             itemInputInventory.setItem(MachineUpdateReason(), 0, stack.subtract(recipe.input.amount))
 
-            val form = formInputOutputInventory.getItem(0) ?: return
             var broke = false
             damageItem(form, 1, block.world, onBreak = {
                 broke = true
