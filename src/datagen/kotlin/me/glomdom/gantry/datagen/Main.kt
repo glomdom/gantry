@@ -52,7 +52,7 @@ fun main(args: Array<String>) {
 
         settings("hydraulic_forming_press") {
             number("tick-interval", 5)
-            number("buffer-amount", 200)
+            number("buffer-amount", 500)
         }
     }
 
