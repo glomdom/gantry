@@ -157,6 +157,7 @@ class HydraulicFormingPress :
     override fun onRecipeFinished(recipe: HydraulicFormingPressRecipe) {
         recipeProgressItem.setItem(GuiItems.background())
         itemOutputInventory.addItem(MachineUpdateReason(), recipe.output.clone())
+        byproductOutputInventory.addItem(MachineUpdateReason(), recipe.byproduct.clone())
     }
 
     override fun getWaila(player: Player): WailaDisplay {
