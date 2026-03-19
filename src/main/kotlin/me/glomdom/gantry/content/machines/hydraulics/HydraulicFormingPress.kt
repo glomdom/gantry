@@ -157,19 +157,6 @@ class HydraulicFormingPress :
     override fun onRecipeFinished(recipe: HydraulicFormingPressRecipe) {
         recipeProgressItem.setItem(GuiItems.background())
         itemOutputInventory.addItem(MachineUpdateReason(), recipe.output.clone())
-
-        val form = formInputOutputInventory.getItem(0) ?: return
-
-        var broke = false
-        damageItem(form, 1, block.world, onBreak = {
-            broke = true
-
-            formInputOutputInventory.setItem(MachineUpdateReason(), 0, GantryItems.SPENT_ROUGH_FORM.clone())
-        })
-
-        if (!broke) {
-            formInputOutputInventory.setItem(MachineUpdateReason(), 0, form)
-        }
     }
 
     override fun getWaila(player: Player): WailaDisplay {
@@ -221,6 +208,18 @@ class HydraulicFormingPress :
             startRecipe(recipe, 80)
             recipeProgressItem.setItem(ItemStackBuilder.of(currentRecipe!!.output.asOne()).clearLore())
             itemInputInventory.setItem(MachineUpdateReason(), 0, stack.subtract(recipe.input.amount))
+
+            val form = formInputOutputInventory.getItem(0) ?: return
+            var broke = false
+            damageItem(form, 1, block.world, onBreak = {
+                broke = true
+
+                formInputOutputInventory.setItem(MachineUpdateReason(), 0, GantryItems.SPENT_ROUGH_FORM.clone())
+            })
+
+            if (!broke) {
+                formInputOutputInventory.setItem(MachineUpdateReason(), 0, form)
+            }
 
             break
         }
