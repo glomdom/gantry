@@ -54,7 +54,7 @@ object GantryItems {
         ROUGH_IRON_ROLLED_STRIP = gantryItem<RebarItem>(Material.IRON_CHAIN, GantryKeys.ROUGH_IRON_ROLLED_STRIP, PylonPages.COMPONENTS)
         ROUGH_FASTENER_PACK = gantryItem<RebarItem>(Material.TRIPWIRE_HOOK, GantryKeys.ROUGH_FASTENER_PACK, PylonPages.COMPONENTS)
 
-        CRUDE_IRON_FRAME_PLATE = gantryItem<RebarItem>(Material.DEEPSLATE_BRICK_SLAB, GantryKeys.CRUDE_IRON_FRAME_PLATE, PylonPages.COMPONENTS)
+        CRUDE_IRON_FRAME_PLATE = gantryItem<RebarItem>(Material.COBBLED_DEEPSLATE_SLAB, GantryKeys.CRUDE_IRON_FRAME_PLATE, PylonPages.COMPONENTS)
 
         HYDRAULIC_FORMING_PRESS =
             GantryItemFactory.create(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS, PylonPages.HYDRAULIC_MACHINES)
