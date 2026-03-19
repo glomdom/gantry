@@ -54,9 +54,10 @@ class HydraulicFormingPress :
     val tickingInterval = getSettings().getOrThrow("tick-interval", ConfigAdapter.INTEGER)
     val fluidBufferAmount = getSettings().getOrThrow("buffer-amount", ConfigAdapter.DOUBLE)
 
-    private val itemInputInventory: VirtualInventory = VirtualInventory(1)
-    private val formInputOutputInventory: VirtualInventory = VirtualInventory(1)
-    private val itemOutputInventory: VirtualInventory = VirtualInventory(1)
+    private val itemInputInventory = VirtualInventory(1)
+    private val formInputOutputInventory = VirtualInventory(1)
+    private val itemOutputInventory = VirtualInventory(1)
+    private val byproductOutputInventory = VirtualInventory(1)
 
     class Item(stack: ItemStack) : RebarItem(stack) {
         val fluidBufferAmount = getSettings().getOrThrow("buffer-amount", ConfigAdapter.DOUBLE)
@@ -91,6 +92,7 @@ class HydraulicFormingPress :
         createLogisticGroup("form-input", LogisticGroupType.INPUT, VirtualInventoryLogisticSlot(formInputOutputInventory, 0))
         createLogisticGroup("form-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(formInputOutputInventory, 0))
         createLogisticGroup("item-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(itemOutputInventory, 0))
+        createLogisticGroup("byproduct-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(byproductOutputInventory, 0))
 
         itemOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
         formInputOutputInventory.addPreUpdateHandler { event ->
@@ -115,9 +117,9 @@ class HydraulicFormingPress :
     override fun createGui(): Gui {
         return Gui.builder()
             .setStructure(
-                "# I F # # # O # #",
-                "# i f # p # o # #",
-                "# I F # # # O # #"
+                "# I F # # # O B #",
+                "# i f # p # o b #",
+                "# I F # # # O B #"
             )
             .addIngredient('#', GuiItems.background())
             .addIngredient('I', GuiItems.input())
@@ -127,6 +129,8 @@ class HydraulicFormingPress :
             .addIngredient('p', recipeProgressItem)
             .addIngredient('O', GuiItems.output())
             .addIngredient('o', itemOutputInventory)
+            .addIngredient('B', GantryGuiItems.byproductOutput())
+            .addIngredient('b', byproductOutputInventory)
             .build()
     }
 
@@ -139,8 +143,6 @@ class HydraulicFormingPress :
         if (!isProcessingRecipe) {
             return
         }
-
-        formInputOutputInventory.getItem(0) ?: return
 
         val fluidAmountRequired = currentRecipe!!.fluidPerSecond * tickingInterval / 20
         if (currentRecipe != null && (fluidAmount(PylonFluids.HYDRAULIC_FLUID) < fluidAmountRequired || fluidAmount(PylonFluids.DIRTY_HYDRAULIC_FLUID) == fluidBufferAmount)) {
@@ -163,7 +165,7 @@ class HydraulicFormingPress :
             broke = true
 
             formInputOutputInventory.setItem(MachineUpdateReason(), 0, GantryItems.SPENT_ROUGH_FORM.clone())
-        }, force = true)
+        })
 
         if (!broke) {
             formInputOutputInventory.setItem(MachineUpdateReason(), 0, form)

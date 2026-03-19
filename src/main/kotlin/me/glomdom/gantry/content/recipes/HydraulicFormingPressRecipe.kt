@@ -24,7 +24,8 @@ class HydraulicFormingPressRecipe(
     val fluidPerSecond: Double,
     val form: ItemStack,
     val input: ItemStack,
-    val output: ItemStack
+    val output: ItemStack,
+    val byproduct: ItemStack
 ) : RebarRecipe {
     override val inputs: List<RecipeInput> = listOf(RecipeInput.of(input), RecipeInput.of(form))
     override val results: List<FluidOrItem> = listOf(FluidOrItem.of(output))
@@ -34,7 +35,7 @@ class HydraulicFormingPressRecipe(
             .setStructure(
                 "# # # # # # # # #",
                 "# # # # # # # # #",
-                "# i f # m # o # #",
+                "# i f # m # o b #",
                 "# # # # # # # # #",
                 "# # # # # # # # #"
             )
@@ -42,6 +43,7 @@ class HydraulicFormingPressRecipe(
             .addIngredient('f', ItemButton(form))
             .addIngredient('m', ItemButton(ItemStackBuilder.of(GantryItems.HYDRAULIC_FORMING_PRESS).build()))
             .addIngredient('o', ItemButton(output))
+            .addIngredient('b', ItemButton(byproduct))
             .addIngredient('#', GuiItems.backgroundBlack())
 
         return gui.build()
@@ -61,7 +63,8 @@ class HydraulicFormingPressRecipe(
                     input = section.getOrThrow("input", ConfigAdapter.ITEM_STACK),
                     output = section.getOrThrow("output", ConfigAdapter.ITEM_STACK),
                     fluidPerSecond = section.getOrThrow("fluid-per-second", ConfigAdapter.DOUBLE),
-                    form = section.getOrThrow("form", ConfigAdapter.ITEM_STACK)
+                    form = section.getOrThrow("form", ConfigAdapter.ITEM_STACK),
+                    byproduct = section.getOrThrow("byproduct", ConfigAdapter.ITEM_STACK)
                 )
             }
         }

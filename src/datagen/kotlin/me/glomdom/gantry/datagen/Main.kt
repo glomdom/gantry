@@ -23,6 +23,8 @@ fun main(args: Array<String>) {
             item("rough_iron_rolled_strip", "Rough Iron Rolled Strip")
             item("rough_fastener_pack", "Rough Fastener Pack")
 
+            item("iron_scrap", "Iron Scrap")
+
             item("crude_iron_frame_plate", "Crude Iron Frame Plate")
 
             item("hydraulic_forming_press", "Hydraulic Forming Press") {
@@ -39,11 +41,13 @@ fun main(args: Array<String>) {
 
         gui {
             item("form_input", "Form Input")
+            item("byproduct_output", "Byproduct Output")
         }
 
         inventories {
             inventory("form-output", "Form Output")
             inventory("form-input", "Form Input")
+            inventory("byproduct-output", "Byproduct Output")
         }
 
         settings("hydraulic_forming_press") {

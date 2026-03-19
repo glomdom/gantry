@@ -12,4 +12,10 @@ object GantryGuiItems {
             ItemStackBuilder.gui(Material.LIGHT_BLUE_STAINED_GLASS_PANE, gantryKey("form_input"))
                 .name(Component.translatable("gantry.gui.form_input"))
         )
+
+    fun byproductOutput(): Item =
+        Item.simple(
+            ItemStackBuilder.gui(Material.YELLOW_STAINED_GLASS_PANE, gantryKey("byproduct_output"))
+                .name(Component.translatable("gantry.gui.byproduct_output"))
+        )
 }
