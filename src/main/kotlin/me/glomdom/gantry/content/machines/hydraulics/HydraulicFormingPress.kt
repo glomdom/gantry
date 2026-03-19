@@ -199,6 +199,7 @@ class HydraulicFormingPress :
         return mapOf(
             "input" to itemInputInventory,
             "form-input-output" to formInputOutputInventory,
+            "byproduct-output" to byproductOutputInventory,
             "output" to itemOutputInventory,
         )
     }
