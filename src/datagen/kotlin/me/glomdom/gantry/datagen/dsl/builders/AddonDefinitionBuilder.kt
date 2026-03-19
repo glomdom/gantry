@@ -4,6 +4,7 @@ import me.glomdom.gantry.datagen.annotations.AddonDsl
 import me.glomdom.gantry.datagen.dsl.definitions.AddonDefinition
 import me.glomdom.gantry.datagen.dsl.definitions.GuiDefinition
 import me.glomdom.gantry.datagen.dsl.definitions.GuidePageDefinition
+import me.glomdom.gantry.datagen.dsl.definitions.InventoriesDefinition
 import me.glomdom.gantry.datagen.dsl.definitions.ItemDefinition
 import me.glomdom.gantry.datagen.dsl.definitions.SettingsDefinition
 
@@ -14,6 +15,7 @@ class AddonDefinitionBuilder {
     private val items = mutableListOf<ItemDefinition>()
     private val settings = mutableListOf<SettingsDefinition>()
     private val guis = mutableListOf<GuiDefinition>()
+    private val inventories = mutableListOf<InventoriesDefinition>()
 
     fun addon(value: String) {
         addon = value
@@ -38,13 +40,18 @@ class AddonDefinitionBuilder {
         )
     }
 
+    fun inventories(block: InventoriesBuilder.() -> Unit) {
+        inventories += InventoriesBuilder().apply(block).build()
+    }
+
     fun build(): AddonDefinition {
         return AddonDefinition(
             name = requireNotNull(addon) { "Missing addon name" },
             guidePages = guidePages,
             items = items,
             settings = settings,
-            guis = guis
+            guis = guis,
+            inventories = inventories,
         )
     }
 }

@@ -1,0 +1,23 @@
+﻿gantry:rough_rolled_strip_form:
+  input: "gantry:rough_press_form"
+  result: "gantry:rough_rolled_strip_form"
+  mining-level: iron
+  chance: 1.00
+
+gantry:rough_rod_form:
+  input: "gantry:rough_rolled_strip_form"
+  result: "gantry:rough_rod_form"
+  mining-level: iron
+  chance: 1.00
+
+gantry:rough_fastener_pack_form:
+  input: "gantry:rough_rod_form"
+  result: "gantry:rough_fastener_pack_form"
+  mining-level: iron
+  chance: 1.00
+
+gantry:rough_rolled_strip_form_cycle:
+  input: "gantry:rough_fastener_pack_form"
+  result: "gantry:rough_rolled_strip_form"
+  mining-level: iron
+  chance: 1.00

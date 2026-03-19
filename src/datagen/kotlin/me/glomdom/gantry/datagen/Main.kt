@@ -41,6 +41,11 @@ fun main(args: Array<String>) {
             item("form_input", "Form Input")
         }
 
+        inventories {
+            inventory("form-output", "Form Output")
+            inventory("form-input", "Form Input")
+        }
+
         settings("hydraulic_forming_press") {
             number("tick-interval", 5)
             number("buffer-amount", 200)

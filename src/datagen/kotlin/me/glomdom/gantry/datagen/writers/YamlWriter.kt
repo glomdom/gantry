@@ -20,12 +20,25 @@ class YamlWriter(private val addonDefinition: AddonDefinition) {
 
     private fun buildTranslationYml(): String = buildString {
         appendLine("addon: \"${addonDefinition.name}\"")
+        append(buildGuidePages())
+        append(buildGuis())
+        append(buildItems())
+        append(buildInventories())
+    }
+
+    private fun buildGuidePages(): String = buildString {
+        if (addonDefinition.guidePages.isEmpty()) return@buildString
+
         appendLine("guide:")
         appendLine("  page:")
 
         for (page in addonDefinition.guidePages) {
             appendLine("    ${page.id}: \"${page.title}\"")
         }
+    }
+
+    private fun buildGuis(): String = buildString {
+        if (addonDefinition.guis.isEmpty()) return@buildString
 
         appendLine("gui:")
         for (guiDefinition in addonDefinition.guis) {
@@ -33,6 +46,10 @@ class YamlWriter(private val addonDefinition: AddonDefinition) {
                 appendLine("  ${item.id}: \"${item.name}\"")
             }
         }
+    }
+
+    private fun buildItems(): String = buildString {
+        if (addonDefinition.items.isEmpty()) return@buildString
 
         appendLine("item:")
 
@@ -53,15 +70,31 @@ class YamlWriter(private val addonDefinition: AddonDefinition) {
         }
     }
 
+    private fun buildInventories(): String = buildString {
+        if (addonDefinition.inventories.isEmpty()) return@buildString
+
+        appendLine("inventory:")
+
+        for (inventory in addonDefinition.inventories) {
+            for (display in inventory.displays) {
+                appendLine("  ${display.id}: ${display.name}")
+            }
+        }
+    }
+
     private fun buildSettingsYml(settingsDefinition: SettingsDefinition): String = buildString {
         for (entry in settingsDefinition.entries) {
-            when (val value = entry.value!!) {
+            when (val value = entry.value) {
                 is String -> {
                     appendLine("${entry.key}: \"$value\"")
                 }
 
                 is Number -> {
                     appendLine("${entry.key}: $value")
+                }
+
+                null -> {
+                    error("Received null as a value for key `${entry.key}`")
                 }
 
                 else -> {
