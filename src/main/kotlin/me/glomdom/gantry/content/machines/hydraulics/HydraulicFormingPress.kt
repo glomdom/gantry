@@ -71,9 +71,6 @@ class HydraulicFormingPress :
     @Suppress("Unused")
     constructor(block: Block, context: BlockCreateContext) : super(block, context) {
         setTickInterval(tickingInterval)
-
-        Gantry.instance.logger.info("Got tick $tickingInterval for $key")
-
         setRecipeType(HydraulicFormingPressRecipe.RECIPE_TYPE)
 
         createFluidBuffer(PylonFluids.HYDRAULIC_FLUID, fluidBufferAmount, input = true, output = false)

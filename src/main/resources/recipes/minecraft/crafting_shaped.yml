@@ -1,0 +1,11 @@
+﻿gantry:crude_iron_frame_plate:
+  pattern:
+    - " S "
+    - "RFR"
+    - " S "
+  key:
+    S: "pylon:iron_sheet"
+    R: "gantry:rough_iron_rolled_strip"
+    F: "gantry:rough_fastener_pack"
+  result: "gantry:crude_iron_frame_plate"
+  category: misc

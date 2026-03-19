@@ -23,6 +23,8 @@ fun main(args: Array<String>) {
             item("rough_iron_rolled_strip", "Rough Iron Rolled Strip")
             item("rough_fastener_pack", "Rough Fastener Pack")
 
+            item("crude_iron_frame_plate", "Crude Iron Frame Plate")
+
             item("hydraulic_forming_press", "Hydraulic Forming Press") {
                 lore("<arrow> Forms metals into forms using the power of hydraulics")
                 lore("<arrow> <attr>Buffer:</attr> %buffer%")

@@ -24,6 +24,8 @@ object GantryItems {
     lateinit var ROUGH_IRON_ROLLED_STRIP: ItemStack private set
     lateinit var ROUGH_FASTENER_PACK: ItemStack private set
 
+    lateinit var CRUDE_IRON_FRAME_PLATE: ItemStack private set
+
     fun registerAll() {
         ROUGH_PRESS_FORM =
             GantryItemFactory.create(Material.CLAY_BALL, GantryKeys.ROUGH_PRESS_FORM, GantryPages.PRESSING)
@@ -51,6 +53,8 @@ object GantryItems {
         ROUGH_IRON_ROD = gantryItem<RebarItem>(Material.COBBLED_DEEPSLATE_WALL, GantryKeys.ROUGH_IRON_ROD, PylonPages.COMPONENTS)
         ROUGH_IRON_ROLLED_STRIP = gantryItem<RebarItem>(Material.IRON_CHAIN, GantryKeys.ROUGH_IRON_ROLLED_STRIP, PylonPages.COMPONENTS)
         ROUGH_FASTENER_PACK = gantryItem<RebarItem>(Material.TRIPWIRE_HOOK, GantryKeys.ROUGH_FASTENER_PACK, PylonPages.COMPONENTS)
+
+        CRUDE_IRON_FRAME_PLATE = gantryItem<RebarItem>(Material.DEEPSLATE_BRICK_SLAB, GantryKeys.CRUDE_IRON_FRAME_PLATE, PylonPages.COMPONENTS)
 
         HYDRAULIC_FORMING_PRESS =
             GantryItemFactory.create(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS, PylonPages.HYDRAULIC_MACHINES)
