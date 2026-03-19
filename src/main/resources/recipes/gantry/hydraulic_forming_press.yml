@@ -15,6 +15,6 @@ gantry:rough_fastener_pack:
 gantry:rough_iron_rolled_strip:
   input: "minecraft:iron_ingot"
   output:
-    gantry:rough_fastener_pack: 1
+    gantry:rough_iron_rolled_strip: 1
   fluid-per-second: 100
-  form: "gantry:rough_iron_rolled_strip"
+  form: "gantry:rough_rolled_strip_form"
