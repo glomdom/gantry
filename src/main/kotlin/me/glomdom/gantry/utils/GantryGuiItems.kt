@@ -2,7 +2,6 @@
 
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import me.glomdom.gantry.GantryKeys
-import me.glomdom.gantry.utils.GantryUtils.gantryKey
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import xyz.xenondevs.invui.item.Item

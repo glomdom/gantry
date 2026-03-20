@@ -3,13 +3,11 @@
 import io.github.pylonmc.rebar.config.ConfigSection
 import io.github.pylonmc.rebar.config.adapter.ConfigAdapter
 import io.github.pylonmc.rebar.guide.button.ItemButton
-import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import io.github.pylonmc.rebar.recipe.ConfigurableRecipeType
 import io.github.pylonmc.rebar.recipe.FluidOrItem
 import io.github.pylonmc.rebar.recipe.RebarRecipe
 import io.github.pylonmc.rebar.recipe.RecipeInput
 import io.github.pylonmc.rebar.util.gui.GuiItems
-import me.glomdom.gantry.GantryItems
 import me.glomdom.gantry.GantryKeys
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
