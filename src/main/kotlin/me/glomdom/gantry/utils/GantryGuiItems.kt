@@ -1,21 +1,22 @@
 ﻿package me.glomdom.gantry.utils
 
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
+import me.glomdom.gantry.GantryKeys
 import me.glomdom.gantry.utils.GantryUtils.gantryKey
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import xyz.xenondevs.invui.item.Item
 
 object GantryGuiItems {
-    fun formInput(): Item =
+    fun formInputOutput(): Item =
         Item.simple(
-            ItemStackBuilder.gui(Material.LIGHT_BLUE_STAINED_GLASS_PANE, gantryKey("form_input"))
-                .name(Component.translatable("gantry.gui.form_input"))
+            ItemStackBuilder.gui(Material.LIGHT_BLUE_STAINED_GLASS_PANE, GantryKeys.GUI_FORM_INPUT_OUTPUT)
+                .name(Component.translatable("gantry.gui.form_input_output"))
         )
 
     fun byproductOutput(): Item =
         Item.simple(
-            ItemStackBuilder.gui(Material.YELLOW_STAINED_GLASS_PANE, gantryKey("byproduct_output"))
+            ItemStackBuilder.gui(Material.YELLOW_STAINED_GLASS_PANE, GantryKeys.GUI_BYPRODUCT_OUTPUT)
                 .name(Component.translatable("gantry.gui.byproduct_output"))
         )
 }

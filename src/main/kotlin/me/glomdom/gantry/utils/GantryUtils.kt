@@ -52,4 +52,13 @@ object GantryUtils {
             rebarItem == null
         }
     }
+
+    inline fun <reified TItem : RebarItem> anyStackIs(vararg stacks: ItemStack?): Boolean {
+        return stacks.any { stack ->
+            if (stack == null || stack.type.isAir) return@any false
+
+            val rebarItem = RebarItem.from<TItem>(stack)
+            rebarItem != null
+        }
+    }
 }

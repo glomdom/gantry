@@ -17,6 +17,7 @@ import io.github.pylonmc.rebar.fluid.FluidPointType
 import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.RebarItem
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
+import io.github.pylonmc.rebar.logistics.LogisticGroup
 import io.github.pylonmc.rebar.logistics.LogisticGroupType
 import io.github.pylonmc.rebar.logistics.slot.VirtualInventoryLogisticSlot
 import io.github.pylonmc.rebar.util.DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER
@@ -26,7 +27,6 @@ import io.github.pylonmc.rebar.util.gui.GuiItems
 import io.github.pylonmc.rebar.util.gui.ProgressItem
 import io.github.pylonmc.rebar.util.gui.unit.UnitFormat
 import io.github.pylonmc.rebar.waila.WailaDisplay
-import me.glomdom.gantry.Gantry
 import me.glomdom.gantry.GantryItems
 import me.glomdom.gantry.content.item.forms.RoughBaseForm
 import me.glomdom.gantry.content.recipes.HydraulicFormingPressRecipe
@@ -77,8 +77,8 @@ class HydraulicFormingPress :
         createFluidBuffer(PylonFluids.HYDRAULIC_FLUID, fluidBufferAmount, input = true, output = false)
         createFluidBuffer(PylonFluids.DIRTY_HYDRAULIC_FLUID, fluidBufferAmount, input = false, output = true)
 
-        createFluidPoint(FluidPointType.INPUT, BlockFace.NORTH, context, false)
-        createFluidPoint(FluidPointType.OUTPUT, BlockFace.SOUTH, context, false)
+        createFluidPoint(FluidPointType.INPUT, BlockFace.UP, context, false)
+        createFluidPoint(FluidPointType.OUTPUT, BlockFace.DOWN, context, false)
 
         facing = context.facing
         recipeProgressItem = ProgressItem(GuiItems.background())
@@ -88,9 +88,11 @@ class HydraulicFormingPress :
     constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc)
 
     override fun postInitialise() {
+        val filteredFormGroup = LogisticGroup(LogisticGroupType.BOTH, VirtualInventoryLogisticSlot(itemInputInventory, 0))
+        filteredFormGroup.filter = { anyStackIsNot<RoughBaseForm>(it) }
+
         createLogisticGroup("item-input", LogisticGroupType.INPUT, VirtualInventoryLogisticSlot(itemInputInventory, 0))
-        createLogisticGroup("form-input", LogisticGroupType.INPUT, VirtualInventoryLogisticSlot(formInputOutputInventory, 0))
-        createLogisticGroup("form-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(formInputOutputInventory, 0))
+        createLogisticGroup("form-input-output", LogisticGroupType.BOTH, VirtualInventoryLogisticSlot(formInputOutputInventory, 0))
         createLogisticGroup("item-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(itemOutputInventory, 0))
         createLogisticGroup("byproduct-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(byproductOutputInventory, 0))
 
@@ -122,7 +124,7 @@ class HydraulicFormingPress :
             .addIngredient('#', GuiItems.background())
             .addIngredient('I', GuiItems.input())
             .addIngredient('i', itemInputInventory)
-            .addIngredient('F', GantryGuiItems.formInput())
+            .addIngredient('F', GantryGuiItems.formInputOutput())
             .addIngredient('f', formInputOutputInventory)
             .addIngredient('p', recipeProgressItem)
             .addIngredient('O', GuiItems.output())
@@ -205,7 +207,7 @@ class HydraulicFormingPress :
             }
 
             startRecipe(recipe, 80)
-            recipeProgressItem.setItem(ItemStackBuilder.of(currentRecipe!!.output.asOne()).clearLore())
+            recipeProgressItem.setItem(ItemStackBuilder.of(form).clearLore())
             itemInputInventory.setItem(MachineUpdateReason(), 0, stack.subtract(recipe.input.amount))
 
             var broke = false

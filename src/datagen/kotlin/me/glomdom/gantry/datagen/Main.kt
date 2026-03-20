@@ -40,13 +40,12 @@ fun main(args: Array<String>) {
         }
 
         gui {
-            item("form_input", "Form Input")
+            item("form_input_output", "Form Input/Output")
             item("byproduct_output", "Byproduct Output")
         }
 
         inventories {
-            inventory("form-output", "Form Output")
-            inventory("form-input", "Form Input")
+            inventory("form-input-output", "Form Input/Output")
             inventory("byproduct-output", "Byproduct Output")
         }
 

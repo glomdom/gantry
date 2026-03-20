@@ -35,13 +35,12 @@ class HydraulicFormingPressRecipe(
             .setStructure(
                 "# # # # # # # # #",
                 "# # # # # # # # #",
-                "# i f # m # o b #",
+                "# i f # f # o b #",
                 "# # # # # # # # #",
                 "# # # # # # # # #"
             )
             .addIngredient('i', ItemButton(input))
             .addIngredient('f', ItemButton(form))
-            .addIngredient('m', ItemButton(ItemStackBuilder.of(GantryItems.HYDRAULIC_FORMING_PRESS).build()))
             .addIngredient('o', ItemButton(output))
             .addIngredient('b', ItemButton(byproduct))
             .addIngredient('#', GuiItems.backgroundBlack())
