@@ -31,6 +31,7 @@ import me.glomdom.gantry.GantryItems
 import me.glomdom.gantry.content.item.forms.RoughBaseForm
 import me.glomdom.gantry.content.recipes.HydraulicFormingPressRecipe
 import me.glomdom.gantry.utils.GantryGuiItems
+import me.glomdom.gantry.utils.GantryUtils.anyStackIs
 import me.glomdom.gantry.utils.GantryUtils.anyStackIsNot
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.block.Block
@@ -88,18 +89,28 @@ class HydraulicFormingPress :
     constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc)
 
     override fun postInitialise() {
-        val filteredFormGroup = LogisticGroup(LogisticGroupType.BOTH, VirtualInventoryLogisticSlot(itemInputInventory, 0))
-        filteredFormGroup.filter = { anyStackIsNot<RoughBaseForm>(it) }
+        val filteredFormGroup = LogisticGroup(LogisticGroupType.BOTH, VirtualInventoryLogisticSlot(formInputOutputInventory, 0))
+        filteredFormGroup.filter = { anyStackIs<RoughBaseForm>(it) }
 
         createLogisticGroup("item-input", LogisticGroupType.INPUT, VirtualInventoryLogisticSlot(itemInputInventory, 0))
-        createLogisticGroup("form-input-output", LogisticGroupType.BOTH, VirtualInventoryLogisticSlot(formInputOutputInventory, 0))
+        createLogisticGroup("form-input-output", filteredFormGroup)
         createLogisticGroup("item-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(itemOutputInventory, 0))
         createLogisticGroup("byproduct-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(byproductOutputInventory, 0))
+        createLogisticGroup(
+            "byproduct-and-item-output",
+            LogisticGroupType.OUTPUT,
+            VirtualInventoryLogisticSlot(itemOutputInventory, 0),
+            VirtualInventoryLogisticSlot(byproductOutputInventory, 0)
+        )
 
         itemOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
         byproductOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
 
         formInputOutputInventory.addPreUpdateHandler { event ->
+            if (event.updateReason is MachineUpdateReason) {
+                return@addPreUpdateHandler
+            }
+
             if (anyStackIsNot<RoughBaseForm>(event.newItem, event.previousItem)) {
                 event.isCancelled = true
             }
@@ -207,7 +218,7 @@ class HydraulicFormingPress :
             }
 
             startRecipe(recipe, 80)
-            recipeProgressItem.setItem(ItemStackBuilder.of(form).clearLore())
+            recipeProgressItem.setItem(ItemStackBuilder.of(recipe.form).clearLore())
             itemInputInventory.setItem(MachineUpdateReason(), 0, stack.subtract(recipe.input.amount))
 
             var broke = false
