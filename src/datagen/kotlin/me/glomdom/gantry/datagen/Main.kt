@@ -53,6 +53,11 @@ fun main(args: Array<String>) {
             number("tick-interval", 5)
             number("buffer-amount", 500)
         }
+
+        settings("hydraulic_debarker") {
+            number("tick-interval", 5)
+            number("buffer-amount", 500)
+        }
     }
 
     YamlWriter(model).writeTo(outDir)
