@@ -33,6 +33,13 @@ fun main(args: Array<String>) {
 
                 waila("Hydraulic Forming Press | %input-bar% | %output-bar%")
             }
+
+            item("hydraulic_debarker", "Hydraulic Debarker") {
+                lore("<arrow> Strips logs out of their bark")
+                lore("<arrow> <attr>Buffer:</attr> %buffer%")
+
+                waila("Hydraulic Debarker | %input-bar% | %output-bar%")
+            }
         }
 
         guide {
@@ -40,12 +47,12 @@ fun main(args: Array<String>) {
         }
 
         gui {
-            item("form_input_output", "Form Input/Output")
+            item("form_input", "Form Input")
             item("byproduct_output", "Byproduct Output")
         }
 
         inventories {
-            inventory("form-input-output", "Form Input/Output")
+            inventory("form-input", "Form Input")
             inventory("byproduct-output", "Byproduct Output")
         }
 

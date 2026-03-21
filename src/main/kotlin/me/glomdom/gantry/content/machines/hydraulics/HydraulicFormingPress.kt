@@ -27,7 +27,6 @@ import io.github.pylonmc.rebar.util.gui.GuiItems
 import io.github.pylonmc.rebar.util.gui.ProgressItem
 import io.github.pylonmc.rebar.util.gui.unit.UnitFormat
 import io.github.pylonmc.rebar.waila.WailaDisplay
-import me.glomdom.gantry.GantryItems
 import me.glomdom.gantry.content.item.forms.RoughBaseForm
 import me.glomdom.gantry.content.recipes.HydraulicFormingPressRecipe
 import me.glomdom.gantry.utils.GantryGuiItems
@@ -135,7 +134,7 @@ class HydraulicFormingPress :
             .addIngredient('#', GuiItems.background())
             .addIngredient('I', GuiItems.input())
             .addIngredient('i', itemInputInventory)
-            .addIngredient('F', GantryGuiItems.formInputOutput())
+            .addIngredient('F', GantryGuiItems.formInput())
             .addIngredient('f', formInputInventory)
             .addIngredient('p', recipeProgressItem)
             .addIngredient('O', GuiItems.output())

@@ -7,10 +7,10 @@ import org.bukkit.Material
 import xyz.xenondevs.invui.item.Item
 
 object GantryGuiItems {
-    fun formInputOutput(): Item =
+    fun formInput(): Item =
         Item.simple(
-            ItemStackBuilder.gui(Material.LIGHT_BLUE_STAINED_GLASS_PANE, GantryKeys.GUI_FORM_INPUT_OUTPUT)
-                .name(Component.translatable("gantry.gui.form_input_output"))
+            ItemStackBuilder.gui(Material.LIGHT_BLUE_STAINED_GLASS_PANE, GantryKeys.GUI_FORM_INPUT)
+                .name(Component.translatable("gantry.gui.form_input"))
         )
 
     fun byproductOutput(): Item =
