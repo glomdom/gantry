@@ -221,16 +221,8 @@ class HydraulicFormingPress :
             recipeProgressItem.setItem(ItemStackBuilder.of(recipe.form).clearLore())
             itemInputInventory.setItem(MachineUpdateReason(), 0, stack.subtract(recipe.input.amount))
 
-            var broke = false
-            damageItem(form, 1, block.world, onBreak = {
-                broke = true
-
-                formInputInventory.setItem(MachineUpdateReason(), 0, GantryItems.SPENT_ROUGH_FORM.clone())
-            })
-
-            if (!broke) {
-                formInputInventory.setItem(MachineUpdateReason(), 0, form)
-            }
+            damageItem(form, 1, block.world)
+            formInputInventory.setItem(MachineUpdateReason(), 0, form)
 
             break
         }
