@@ -56,7 +56,7 @@ class HydraulicFormingPress :
     val fluidBufferAmount = getSettings().getOrThrow("buffer-amount", ConfigAdapter.DOUBLE)
 
     private val itemInputInventory = VirtualInventory(1)
-    private val formInputOutputInventory = VirtualInventory(1)
+    private val formInputInventory = VirtualInventory(1)
     private val itemOutputInventory = VirtualInventory(1)
     private val byproductOutputInventory = VirtualInventory(1)
 
@@ -89,11 +89,11 @@ class HydraulicFormingPress :
     constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc)
 
     override fun postInitialise() {
-        val filteredFormGroup = LogisticGroup(LogisticGroupType.BOTH, VirtualInventoryLogisticSlot(formInputOutputInventory, 0))
+        val filteredFormGroup = LogisticGroup(LogisticGroupType.INPUT, VirtualInventoryLogisticSlot(formInputInventory, 0))
         filteredFormGroup.filter = { anyStackIs<RoughBaseForm>(it) }
 
         createLogisticGroup("item-input", LogisticGroupType.INPUT, VirtualInventoryLogisticSlot(itemInputInventory, 0))
-        createLogisticGroup("form-input-output", filteredFormGroup)
+        createLogisticGroup("form-input", filteredFormGroup)
         createLogisticGroup("item-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(itemOutputInventory, 0))
         createLogisticGroup("byproduct-output", LogisticGroupType.OUTPUT, VirtualInventoryLogisticSlot(byproductOutputInventory, 0))
         createLogisticGroup(
@@ -106,7 +106,7 @@ class HydraulicFormingPress :
         itemOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
         byproductOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
 
-        formInputOutputInventory.addPreUpdateHandler { event ->
+        formInputInventory.addPreUpdateHandler { event ->
             if (event.updateReason is MachineUpdateReason) {
                 return@addPreUpdateHandler
             }
@@ -117,7 +117,7 @@ class HydraulicFormingPress :
         }
 
         itemOutputInventory.addPostUpdateHandler { _ -> tryStartRecipe(); }
-        formInputOutputInventory.addPostUpdateHandler { _ -> tryStartRecipe(); }
+        formInputInventory.addPostUpdateHandler { _ -> tryStartRecipe(); }
         itemInputInventory.addPostUpdateHandler { event ->
             if (event.updateReason !is MachineUpdateReason) {
                 tryStartRecipe()
@@ -136,7 +136,7 @@ class HydraulicFormingPress :
             .addIngredient('I', GuiItems.input())
             .addIngredient('i', itemInputInventory)
             .addIngredient('F', GantryGuiItems.formInputOutput())
-            .addIngredient('f', formInputOutputInventory)
+            .addIngredient('f', formInputInventory)
             .addIngredient('p', recipeProgressItem)
             .addIngredient('O', GuiItems.output())
             .addIngredient('o', itemOutputInventory)
@@ -197,7 +197,7 @@ class HydraulicFormingPress :
     override fun getVirtualInventories(): Map<String, VirtualInventory> {
         return mapOf(
             "input" to itemInputInventory,
-            "form-input-output" to formInputOutputInventory,
+            "form-input" to formInputInventory,
             "byproduct-output" to byproductOutputInventory,
             "output" to itemOutputInventory,
         )
@@ -207,7 +207,7 @@ class HydraulicFormingPress :
         if (isProcessingRecipe) return
 
         val stack = itemInputInventory.getItem(0) ?: return
-        val form = formInputOutputInventory.getItem(0) ?: return
+        val form = formInputInventory.getItem(0) ?: return
 
         for (recipe in HydraulicFormingPressRecipe.RECIPE_TYPE) {
             if (!recipe.input.isSimilar(stack) ||
@@ -225,11 +225,11 @@ class HydraulicFormingPress :
             damageItem(form, 1, block.world, onBreak = {
                 broke = true
 
-                formInputOutputInventory.setItem(MachineUpdateReason(), 0, GantryItems.SPENT_ROUGH_FORM.clone())
+                formInputInventory.setItem(MachineUpdateReason(), 0, GantryItems.SPENT_ROUGH_FORM.clone())
             })
 
             if (!broke) {
-                formInputOutputInventory.setItem(MachineUpdateReason(), 0, form)
+                formInputInventory.setItem(MachineUpdateReason(), 0, form)
             }
 
             break
