@@ -8,6 +8,7 @@ import io.github.pylonmc.rebar.recipe.FluidOrItem
 import io.github.pylonmc.rebar.recipe.RebarRecipe
 import io.github.pylonmc.rebar.recipe.RecipeInput
 import io.github.pylonmc.rebar.util.gui.GuiItems
+import me.glomdom.gantry.GantryItems
 import me.glomdom.gantry.GantryKeys
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -33,12 +34,13 @@ class HydraulicFormingPressRecipe(
             .setStructure(
                 "# # # # # # # # #",
                 "# # # # # # # # #",
-                "# i f # f # o b #",
+                "# i f # m # o b #",
                 "# # # # # # # # #",
                 "# # # # # # # # #"
             )
             .addIngredient('i', ItemButton(input))
             .addIngredient('f', ItemButton(form))
+            .addIngredient('m', ItemButton(GantryItems.HYDRAULIC_FORMING_PRESS))
             .addIngredient('o', ItemButton(output))
             .addIngredient('b', ItemButton(byproduct))
             .addIngredient('#', GuiItems.backgroundBlack())

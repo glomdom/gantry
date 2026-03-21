@@ -6,6 +6,7 @@ import me.glomdom.gantry.content.machines.hydraulics.HydraulicFormingPress
 import me.glomdom.gantry.content.item.GantryItemFactory
 import me.glomdom.gantry.content.item.forms.RoughBaseForm
 import me.glomdom.gantry.content.item.forms.RoughRolledStripForm
+import me.glomdom.gantry.content.machines.hydraulics.HydraulicDebarker
 import me.glomdom.gantry.utils.GantryUtils.gantryItem
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -26,6 +27,7 @@ object GantryItems {
     lateinit var ROUGH_FASTENER_PACK: ItemStack private set
 
     lateinit var IRON_SCRAP: ItemStack private set
+    lateinit var BARK: ItemStack private set
 
     lateinit var CRUDE_IRON_FRAME_PLATE: ItemStack private set
 
@@ -61,6 +63,7 @@ object GantryItems {
             gantryItem<RebarItem>(Material.COBBLED_DEEPSLATE_SLAB, GantryKeys.CRUDE_IRON_FRAME_PLATE, PylonPages.COMPONENTS)
 
         IRON_SCRAP = gantryItem<RebarItem>(Material.IRON_NUGGET, GantryKeys.IRON_SCRAP, PylonPages.RESOURCES)
+        BARK = gantryItem<RebarItem>(Material.OAK_BUTTON, GantryKeys.BARK, PylonPages.RESOURCES)
 
         HYDRAULIC_FORMING_PRESS =
             GantryItemFactory.create(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS, PylonPages.HYDRAULIC_MACHINES)
@@ -70,6 +73,6 @@ object GantryItems {
         HYDRAULIC_DEBARKER =
             GantryItemFactory.create(Material.POLISHED_GRANITE, GantryKeys.HYDRAULIC_DEBARKER, PylonPages.HYDRAULIC_MACHINES)
                 .asBlockItem()
-                .build(HydraulicFormingPress.Item::class.java)
+                .build(HydraulicDebarker.Item::class.java)
     }
 }

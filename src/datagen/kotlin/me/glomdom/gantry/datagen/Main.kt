@@ -24,6 +24,7 @@ fun main(args: Array<String>) {
             item("rough_fastener_pack", "Rough Fastener Pack")
 
             item("iron_scrap", "Iron Scrap")
+            item("bark", "Bark")
 
             item("crude_iron_frame_plate", "Crude Iron Frame Plate")
 
@@ -64,6 +65,7 @@ fun main(args: Array<String>) {
         settings("hydraulic_debarker") {
             number("tick-interval", 5)
             number("buffer-amount", 500)
+            number("fluid-per-second", 100)
         }
     }
 

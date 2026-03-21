@@ -1,0 +1,5 @@
+﻿gantry:log_debark:
+  input: minecraft:oak_log
+  output:
+    gantry:bark: 2
+  byproduct: minecraft:stripped_oak_log

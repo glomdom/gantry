@@ -9,7 +9,8 @@ import io.github.pylonmc.rebar.recipe.FluidOrItem
 import io.github.pylonmc.rebar.recipe.RebarRecipe
 import io.github.pylonmc.rebar.recipe.RecipeInput
 import io.github.pylonmc.rebar.util.gui.GuiItems
-import me.glomdom.gantry.GantryKeys
+import me.glomdom.gantry.GantryItems
+import me.glomdom.gantry.utils.GantryUtils.gantryKey
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -17,26 +18,27 @@ import xyz.xenondevs.invui.gui.Gui
 
 class DebarkerRecipe(
     val recipeKey: NamespacedKey,
-    val fluidPerSecond: Double,
     val input: ItemStack,
-    val outputs: List<ItemStack>,
+    val output: ItemStack,
+    val byproduct: ItemStack?,
 ) : RebarRecipe {
     override val inputs: List<RecipeInput> = listOf(RecipeInput.of(input))
-    override val results: List<FluidOrItem> = outputs.map(FluidOrItem::of)
+    override val results: List<FluidOrItem> =
+        listOf(FluidOrItem.of(output), FluidOrItem.of(byproduct ?: ItemStackBuilder.of(Material.AIR).build()))
 
     override fun display(): Gui {
         val gui = Gui.builder()
             .setStructure(
                 "# # # # # # # # #",
                 "# # # # # # # # #",
-                "# # i # p # o O #",
+                "# # i # p # o b #",
                 "# # # # # # # # #",
                 "# # # # # # # # #"
             )
             .addIngredient('i', ItemButton(input))
-            .addIngredient('p', ItemButton(ItemStackBuilder.of(Material.DIAMOND_AXE).build()))
-            .addIngredient('o', ItemButton(outputs[0]))
-            .addIngredient('o', ItemButton(outputs[1]))
+            .addIngredient('p', ItemButton(GantryItems.HYDRAULIC_DEBARKER))
+            .addIngredient('o', ItemButton(output))
+            .addIngredient('b', ItemButton(byproduct ?: ItemStackBuilder.of(Material.AIR).build()))
             .addIngredient('#', GuiItems.backgroundBlack())
 
         return gui.build()
@@ -46,20 +48,16 @@ class DebarkerRecipe(
         recipeKey
 
     companion object {
-        val RECIPE_TYPE = object : ConfigurableRecipeType<DebarkerRecipe>(GantryKeys.HYDRAULIC_DEBARKER) {
+        val RECIPE_TYPE = object : ConfigurableRecipeType<DebarkerRecipe>(gantryKey("debarking")) {
             override fun loadRecipe(
                 key: NamespacedKey,
                 section: ConfigSection
             ): DebarkerRecipe {
-                val outputs = section.getOrThrow("outputs", ConfigAdapter.LIST.from(ConfigAdapter.ITEM_STACK))
-
-                require(outputs.count() < 3) { "DebarkerRecipe received an output count of more than 2" }
-
                 return DebarkerRecipe(
                     recipeKey = key,
                     input = section.getOrThrow("input", ConfigAdapter.ITEM_STACK),
-                    outputs = outputs,
-                    fluidPerSecond = section.getOrThrow("fluid-per-second", ConfigAdapter.DOUBLE),
+                    output = section.getOrThrow("output", ConfigAdapter.ITEM_STACK),
+                    byproduct = section.get("byproduct", ConfigAdapter.ITEM_STACK),
                 )
             }
         }

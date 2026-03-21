@@ -17,6 +17,7 @@ object GantryKeys {
     val CRUDE_IRON_FRAME_PLATE = gantryKey("crude_iron_frame_plate")
 
     val IRON_SCRAP = gantryKey("iron_scrap")
+    val BARK = gantryKey("bark")
 
     val HYDRAULIC_FORMING_PRESS = gantryKey("hydraulic_forming_press")
     val HYDRAULIC_DEBARKER = gantryKey("hydraulic_debarker")
