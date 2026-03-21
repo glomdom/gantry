@@ -52,8 +52,8 @@ class HydraulicFormingPress :
     RebarLogisticBlock,
     RebarRecipeProcessor<HydraulicFormingPressRecipe> {
 
-    val tickingInterval = getSettings().getOrThrow("tick-interval", ConfigAdapter.INTEGER)
-    val fluidBufferAmount = getSettings().getOrThrow("buffer-amount", ConfigAdapter.DOUBLE)
+    private val tickingInterval = getSettings().getOrThrow("tick-interval", ConfigAdapter.INTEGER)
+    private val fluidBufferAmount = getSettings().getOrThrow("buffer-amount", ConfigAdapter.DOUBLE)
 
     private val itemInputInventory = VirtualInventory(1)
     private val formInputInventory = VirtualInventory(1)

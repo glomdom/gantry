@@ -19,6 +19,7 @@ object GantryItems {
     lateinit var ROUGH_FASTENER_PACK_FORM: ItemStack private set
 
     lateinit var HYDRAULIC_FORMING_PRESS: ItemStack private set
+    lateinit var HYDRAULIC_DEBARKER: ItemStack private set
 
     lateinit var ROUGH_IRON_ROD: ItemStack private set
     lateinit var ROUGH_IRON_ROLLED_STRIP: ItemStack private set
@@ -56,12 +57,18 @@ object GantryItems {
         ROUGH_IRON_ROLLED_STRIP = gantryItem<RebarItem>(Material.IRON_CHAIN, GantryKeys.ROUGH_IRON_ROLLED_STRIP, PylonPages.COMPONENTS)
         ROUGH_FASTENER_PACK = gantryItem<RebarItem>(Material.TRIPWIRE_HOOK, GantryKeys.ROUGH_FASTENER_PACK, PylonPages.COMPONENTS)
 
-        CRUDE_IRON_FRAME_PLATE = gantryItem<RebarItem>(Material.COBBLED_DEEPSLATE_SLAB, GantryKeys.CRUDE_IRON_FRAME_PLATE, PylonPages.COMPONENTS)
+        CRUDE_IRON_FRAME_PLATE =
+            gantryItem<RebarItem>(Material.COBBLED_DEEPSLATE_SLAB, GantryKeys.CRUDE_IRON_FRAME_PLATE, PylonPages.COMPONENTS)
 
         IRON_SCRAP = gantryItem<RebarItem>(Material.IRON_NUGGET, GantryKeys.IRON_SCRAP, PylonPages.RESOURCES)
 
         HYDRAULIC_FORMING_PRESS =
             GantryItemFactory.create(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS, PylonPages.HYDRAULIC_MACHINES)
+                .asBlockItem()
+                .build(HydraulicFormingPress.Item::class.java)
+
+        HYDRAULIC_DEBARKER =
+            GantryItemFactory.create(Material.POLISHED_GRANITE, GantryKeys.HYDRAULIC_DEBARKER, PylonPages.HYDRAULIC_MACHINES)
                 .asBlockItem()
                 .build(HydraulicFormingPress.Item::class.java)
     }

@@ -19,6 +19,7 @@ object GantryKeys {
     val IRON_SCRAP = gantryKey("iron_scrap")
 
     val HYDRAULIC_FORMING_PRESS = gantryKey("hydraulic_forming_press")
+    val HYDRAULIC_DEBARKER = gantryKey("hydraulic_debarker")
 
     val GUI_FORM_INPUT_OUTPUT = gantryKey("form_input_output")
     val GUI_BYPRODUCT_OUTPUT = gantryKey("byproduct_output")
