@@ -48,7 +48,7 @@ class DebarkerRecipe(
         recipeKey
 
     companion object {
-        val RECIPE_TYPE = object : ConfigurableRecipeType<DebarkerRecipe>(gantryKey("debarking")) {
+        val RECIPE_TYPE = object : ConfigurableRecipeType<DebarkerRecipe>(gantryKey("debarker")) {
             override fun loadRecipe(
                 key: NamespacedKey,
                 section: ConfigSection

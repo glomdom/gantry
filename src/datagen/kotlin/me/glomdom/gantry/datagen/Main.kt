@@ -66,6 +66,7 @@ fun main(args: Array<String>) {
             number("tick-interval", 5)
             number("buffer-amount", 500)
             number("fluid-per-second", 100)
+            number("recipe-time", 100)
         }
     }
 

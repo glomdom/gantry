@@ -16,13 +16,19 @@ import io.github.pylonmc.rebar.config.adapter.ConfigAdapter
 import io.github.pylonmc.rebar.fluid.FluidPointType
 import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.RebarItem
+import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
+import io.github.pylonmc.rebar.util.DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER
+import io.github.pylonmc.rebar.util.MachineUpdateReason
+import io.github.pylonmc.rebar.util.damageItem
 import io.github.pylonmc.rebar.util.gui.GuiItems
 import io.github.pylonmc.rebar.util.gui.ProgressItem
 import io.github.pylonmc.rebar.util.gui.unit.UnitFormat
 import io.github.pylonmc.rebar.waila.WailaDisplay
 import me.glomdom.gantry.content.recipes.DebarkerRecipe
+import me.glomdom.gantry.content.recipes.HydraulicFormingPressRecipe
 import me.glomdom.gantry.utils.GantryGuiItems
 import net.kyori.adventure.text.format.TextColor
+import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.entity.Player
@@ -44,6 +50,7 @@ class HydraulicDebarker :
     private val tickingInterval = getSettings().getOrThrow("tick-interval", ConfigAdapter.INTEGER)
     private val fluidBufferAmount = getSettings().getOrThrow("buffer-amount", ConfigAdapter.DOUBLE)
     private val fluidPerSecond = getSettings().getOrThrow("fluid-per-second", ConfigAdapter.DOUBLE)
+    private val recipeTime = getSettings().getOrThrow("recipe-time", ConfigAdapter.INTEGER)
 
     private val itemInputInventory = VirtualInventory(1)
     private val itemOutputInventory = VirtualInventory(1)
@@ -66,8 +73,8 @@ class HydraulicDebarker :
         createFluidBuffer(PylonFluids.HYDRAULIC_FLUID, fluidBufferAmount, input = true, output = false)
         createFluidBuffer(PylonFluids.DIRTY_HYDRAULIC_FLUID, fluidBufferAmount, input = false, output = true)
 
-        createFluidPoint(FluidPointType.INPUT, BlockFace.EAST, context, false)
-        createFluidPoint(FluidPointType.OUTPUT, BlockFace.WEST, context, false)
+        createFluidPoint(FluidPointType.INPUT, BlockFace.NORTH, context, false)
+        createFluidPoint(FluidPointType.OUTPUT, BlockFace.SOUTH, context, false)
 
         setRecipeType(DebarkerRecipe.RECIPE_TYPE)
 
@@ -77,6 +84,13 @@ class HydraulicDebarker :
 
     @Suppress("Unused")
     constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc)
+
+    override fun postInitialise() {
+        itemOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
+        byproductOutputInventory.addPreUpdateHandler(DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER)
+
+        itemInputInventory.addPostUpdateHandler { _ -> tryStartRecipe(); }
+    }
 
     override fun onBreak(drops: MutableList<ItemStack>, context: BlockBreakContext) {
         super<RebarVirtualInventoryBlock>.onBreak(drops, context)
@@ -92,9 +106,24 @@ class HydraulicDebarker :
     }
 
     override fun tick() {
+        if (!isProcessingRecipe) {
+            return
+        }
+
+        val fluidAmountRequired = fluidPerSecond * tickingInterval / 20
+        if (currentRecipe != null && (fluidAmount(PylonFluids.HYDRAULIC_FLUID) < fluidAmountRequired || fluidAmount(PylonFluids.DIRTY_HYDRAULIC_FLUID) == fluidBufferAmount)) {
+            return
+        }
+
+        removeFluid(PylonFluids.HYDRAULIC_FLUID, fluidAmountRequired)
+        addFluid(PylonFluids.DIRTY_HYDRAULIC_FLUID, fluidAmountRequired)
+        progressRecipe(tickingInterval)
     }
 
     override fun onRecipeFinished(recipe: DebarkerRecipe) {
+        recipeProgressItem.setItem(GuiItems.background())
+        itemOutputInventory.addItem(MachineUpdateReason(), recipe.output.clone())
+        byproductOutputInventory.addItem(MachineUpdateReason(), recipe.byproduct?.clone() ?: ItemStackBuilder.of(Material.AIR).build())
     }
 
     override fun getWaila(player: Player): WailaDisplay {
@@ -136,5 +165,23 @@ class HydraulicDebarker :
             .addIngredient('B', GantryGuiItems.byproductOutput())
             .addIngredient('b', byproductOutputInventory)
             .build()
+    }
+
+    fun tryStartRecipe() {
+        if (isProcessingRecipe) return
+
+        val stack = itemInputInventory.getItem(0) ?: return
+
+        for (recipe in DebarkerRecipe.RECIPE_TYPE) {
+            if (!recipe.input.isSimilar(stack) || !itemOutputInventory.canHold(recipe.output)) {
+                continue
+            }
+
+            startRecipe(recipe, recipeTime)
+            recipeProgressItem.setItem(ItemStackBuilder.of(Material.DIAMOND_AXE).clearLore())
+            itemInputInventory.setItem(MachineUpdateReason(), 0, stack.subtract(recipe.input.amount))
+
+            break
+        }
     }
 }
