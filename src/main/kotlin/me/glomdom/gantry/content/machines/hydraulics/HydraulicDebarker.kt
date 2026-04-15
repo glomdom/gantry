@@ -111,7 +111,10 @@ class HydraulicDebarker :
         }
 
         val fluidAmountRequired = fluidPerSecond * tickingInterval / 20
-        if (currentRecipe != null && (fluidAmount(PylonFluids.HYDRAULIC_FLUID) < fluidAmountRequired || fluidAmount(PylonFluids.DIRTY_HYDRAULIC_FLUID) == fluidBufferAmount)) {
+        val hasEnoughClean = fluidAmount(PylonFluids.HYDRAULIC_FLUID) >= fluidAmountRequired
+        val hasSpaceForDirty = (fluidAmount(PylonFluids.DIRTY_HYDRAULIC_FLUID) + fluidAmountRequired) <= fluidBufferAmount
+
+        if (!hasEnoughClean || !hasSpaceForDirty) {
             return
         }
 
@@ -173,7 +176,8 @@ class HydraulicDebarker :
         val stack = itemInputInventory.getItem(0) ?: return
 
         for (recipe in DebarkerRecipe.RECIPE_TYPE) {
-            if (!recipe.input.isSimilar(stack) || !itemOutputInventory.canHold(recipe.output)) {
+            val byproductFits = recipe.byproduct == null || byproductOutputInventory.canHold(recipe.byproduct)
+            if (!recipe.input.isSimilar(stack) || !itemOutputInventory.canHold(recipe.output) || !byproductFits) {
                 continue
             }
 

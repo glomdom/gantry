@@ -155,7 +155,10 @@ class HydraulicFormingPress :
         }
 
         val fluidAmountRequired = currentRecipe!!.fluidPerSecond * tickingInterval / 20
-        if (currentRecipe != null && (fluidAmount(PylonFluids.HYDRAULIC_FLUID) < fluidAmountRequired || fluidAmount(PylonFluids.DIRTY_HYDRAULIC_FLUID) == fluidBufferAmount)) {
+        val hasEnoughClean = fluidAmount(PylonFluids.HYDRAULIC_FLUID) >= fluidAmountRequired
+        val hasSpaceForDirty = (fluidAmount(PylonFluids.DIRTY_HYDRAULIC_FLUID) + fluidAmountRequired) <= fluidBufferAmount
+
+        if (!hasEnoughClean || !hasSpaceForDirty) {
             return
         }
 
@@ -211,7 +214,8 @@ class HydraulicFormingPress :
         for (recipe in HydraulicFormingPressRecipe.RECIPE_TYPE) {
             if (!recipe.input.isSimilar(stack) ||
                 !matchesForm(recipe.form, form) ||
-                !itemOutputInventory.canHold(recipe.output)
+                !itemOutputInventory.canHold(recipe.output) ||
+                !byproductOutputInventory.canHold(recipe.byproduct)
             ) {
                 continue
             }
