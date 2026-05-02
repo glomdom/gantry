@@ -1,6 +1,7 @@
 ﻿package me.glomdom.gantry
 
 import io.github.pylonmc.pylon.PylonPages
+import io.github.pylonmc.rebar.item.RebarItem
 import me.glomdom.gantry.content.machines.hydraulics.HydraulicFormingPress
 import me.glomdom.gantry.content.item.forms.RoughBaseForm
 import me.glomdom.gantry.content.machines.hydraulics.HydraulicDebarker
@@ -57,6 +58,10 @@ object GantryItems : GantryRegistry() {
     val CRUDE_IRON_FRAME_PLATE by simpleRebarItem(Material.COBBLED_DEEPSLATE_SLAB, GantryKeys.CRUDE_IRON_FRAME_PLATE, PylonPages.COMPONENTS)
 
     val FIRE_BRICK by simpleRebarItem(Material.BRICK, GantryKeys.FIRE_BRICK, PylonPages.COMPONENTS)
-    val FIRE_BRICKS by simpleRebarItem(Material.BRICKS, GantryKeys.FIRE_BRICKS, PylonPages.COMPONENTS)
-    val PYROLYSIS_OVEN_CONTROLLER by simpleRebarItem(Material.FURNACE, GantryKeys.PYROLYSIS_OVEN_CONTROLLER, PylonPages.MACHINES)
+    val FIRE_BRICKS by factoryItem<RebarItem>(Material.BRICKS, GantryKeys.FIRE_BRICKS, PylonPages.COMPONENTS) { asBlockItem() }
+    val PYROLYSIS_OVEN_CONTROLLER by factoryItem<RebarItem>(
+        Material.FURNACE,
+        GantryKeys.PYROLYSIS_OVEN_CONTROLLER,
+        PylonPages.MACHINES
+    ) { asBlockItem() }
 }
