@@ -1,5 +1,6 @@
 ﻿package me.glomdom.gantry
 
+import io.github.pylonmc.rebar.block.RebarBlock
 import me.glomdom.gantry.content.machines.hydraulics.HydraulicDebarker
 import me.glomdom.gantry.content.machines.hydraulics.HydraulicFormingPress
 import me.glomdom.gantry.utils.GantryUtils.gantryBlock
@@ -9,5 +10,6 @@ object GantryBlocks {
     fun registerAll() {
         gantryBlock<HydraulicFormingPress>(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS)
         gantryBlock<HydraulicDebarker>(Material.POLISHED_GRANITE, GantryKeys.HYDRAULIC_DEBARKER)
+        gantryBlock<RebarBlock>(Material.BRICKS,GantryKeys.FIRE_BRICKS);
     }
 }

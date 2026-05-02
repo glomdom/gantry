@@ -23,22 +23,14 @@ class GantryItemFactory private constructor(
         blockItem = true
     }
 
-    fun <TItem : RebarItem> build(itemClass: Class<TItem>): ItemStack {
+    fun <TItem : RebarItem> build(): ItemStack {
         val builder = ItemStackBuilder.rebar(material, key)
         durability?.let(builder::durability)
 
-        val item = builder.build()
-
-        if (blockItem) {
-            RebarItem.register(itemClass, item, key)
-        } else {
-            RebarItem.register(itemClass, item)
-        }
-
-        page.addItem(item)
-
-        return item
+        return builder.build()
     }
+
+    fun isBlockItem(): Boolean = blockItem
 
     companion object {
         fun create(

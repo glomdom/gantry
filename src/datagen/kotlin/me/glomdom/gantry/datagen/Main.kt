@@ -28,6 +28,9 @@ fun main(args: Array<String>) {
 
             item("crude_iron_frame_plate", "Crude Iron Frame Plate")
 
+            item("fire_bricks", "Fire Bricks")
+            item("fire_brick", "Fire Brick")
+
             item("hydraulic_forming_press", "Hydraulic Forming Press") {
                 lore("<arrow> Forms metals into forms using the power of hydraulics")
                 lore("<arrow> <attr>Buffer:</attr> %buffer%")
