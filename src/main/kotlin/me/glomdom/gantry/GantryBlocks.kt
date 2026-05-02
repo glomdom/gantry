@@ -1,15 +1,12 @@
 ﻿package me.glomdom.gantry
 
-import io.github.pylonmc.rebar.block.RebarBlock
 import me.glomdom.gantry.content.machines.hydraulics.HydraulicDebarker
 import me.glomdom.gantry.content.machines.hydraulics.HydraulicFormingPress
-import me.glomdom.gantry.utils.GantryUtils.gantryBlock
+import me.glomdom.gantry.registry.GantryRegistry
 import org.bukkit.Material
 
-object GantryBlocks {
-    fun registerAll() {
-        gantryBlock<HydraulicFormingPress>(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS)
-        gantryBlock<HydraulicDebarker>(Material.POLISHED_GRANITE, GantryKeys.HYDRAULIC_DEBARKER)
-        gantryBlock<RebarBlock>(Material.BRICKS,GantryKeys.FIRE_BRICKS);
-    }
+object GantryBlocks : GantryRegistry() {
+    val HYDRAULIC_FORMING_PRESS by rebarBlock<HydraulicFormingPress>(Material.SMOOTH_STONE, GantryKeys.HYDRAULIC_FORMING_PRESS)
+    val HYDRAULIC_DEBARKER by rebarBlock<HydraulicDebarker>(Material.POLISHED_GRANITE, GantryKeys.HYDRAULIC_DEBARKER)
+    val FIRE_BRICKS by simpleRebarBlock(Material.BRICKS,GantryKeys.FIRE_BRICKS)
 }

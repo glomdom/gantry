@@ -1,5 +1,6 @@
 ﻿package me.glomdom.gantry.registry
 
+import io.github.pylonmc.rebar.block.RebarBlock
 import io.github.pylonmc.rebar.guide.pages.base.SimpleStaticGuidePage
 import io.github.pylonmc.rebar.item.RebarItem
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
@@ -31,6 +32,22 @@ abstract class GantryRegistry {
             builder = {
                 ItemStackBuilder.rebar(material, key).build()
             }
+        )
+
+    protected fun simpleRebarBlock(material: Material, key: NamespacedKey) =
+        entry(
+            registerAction = { _ ->
+                RebarBlock.register(key, material, RebarBlock::class.java)
+            },
+            builder = {}
+        )
+
+    protected inline fun <reified TBlock : RebarBlock> rebarBlock(material: Material, key: NamespacedKey) =
+        entry(
+            registerAction = { _ ->
+                RebarBlock.register(key, material, TBlock::class.java)
+            },
+            builder = {}
         )
 
     protected inline fun <reified TItem : RebarItem> factoryItem(
