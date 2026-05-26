@@ -5,9 +5,9 @@ import io.github.pylonmc.rebar.guide.pages.base.SimpleStaticGuidePage
 import me.glomdom.gantry.utils.GantryUtils.gantryKey
 
 object GantryPages {
-    val PRESSING = SimpleStaticGuidePage(gantryKey("pressing"))
+    val COAL_POWERED_MACHINES = SimpleStaticGuidePage(gantryKey("coal_powered_machines"))
 
     fun initialize() {
-        RebarGuide.rootPage.addPage(GantryItems.ROUGH_PRESS_FORM, PRESSING)
+        RebarGuide.rootPage.addPage(GantryItems.COAL_POWERED_PRESS, COAL_POWERED_MACHINES)
     }
 }

@@ -1,14 +1,8 @@
 ﻿package me.glomdom.gantry.utils
 
-import io.github.pylonmc.pylon.PylonPages
 import io.github.pylonmc.rebar.block.RebarBlock
-import io.github.pylonmc.rebar.guide.pages.base.SimpleStaticGuidePage
 import io.github.pylonmc.rebar.item.RebarItem
-import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import me.glomdom.gantry.Gantry
-import me.glomdom.gantry.GantryKeys
-import me.glomdom.gantry.content.item.GantryItemFactory
-import me.glomdom.gantry.content.machines.hydraulics.HydraulicFormingPress
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack

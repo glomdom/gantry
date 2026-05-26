@@ -1,11 +1,9 @@
 ﻿package me.glomdom.gantry
 
-import me.glomdom.gantry.content.recipes.DebarkerRecipe
-import me.glomdom.gantry.content.recipes.HydraulicFormingPressRecipe
+import me.glomdom.gantry.recipes.CoalPoweredPressRecipe
 
 object GantryRecipes {
     fun registerAll() {
-        HydraulicFormingPressRecipe.RECIPE_TYPE.register()
-        DebarkerRecipe.RECIPE_TYPE.register()
+        CoalPoweredPressRecipe.RECIPE_TYPE.register()
     }
 }

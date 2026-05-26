@@ -8,8 +8,10 @@ plugins {
     kotlin("jvm") version "2.3.0"
 
     id("com.gradleup.shadow") version "9.0.0"
-    id("de.eldoria.plugin-yml.paper") version "0.7.1"
-    id("xyz.jpenilla.run-paper") version "2.3.0"
+    id("de.eldoria.plugin-yml.paper") version "0.9.0"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
+
+    id("com.glomdom.rebardatagen") version "0.0.6"
 }
 
 group = "me.glomdom"
@@ -18,22 +20,11 @@ version = "1.0-SNAPSHOT"
 val minecraftVersion = property("minecraft.version").toString()
 val rebarVersion = property("rebar.version").toString()
 val pylonVersion = property("pylon.version").toString()
-
-val generatedResourcesDir = layout.buildDirectory.dir("generated/gantry-resources/main")
-
-sourceSets {
-    create("datagen") {
-        kotlin.srcDirs("src/datagen/kotlin")
-        resources.srcDirs("src/datagen/resources")
-
-        compileClasspath += sourceSets["main"].compileClasspath + files(sourceSets["main"].output.classesDirs)
-        runtimeClasspath += output + compileClasspath
-    }
-}
+val datagenVersion = property("datagen.version").toString()
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    maven("https://central.sonatype.com/repository/maven-snapshots/")
 
     maven("https://repo.papermc.io/repository/maven-public/") {
         name = "papermc"
@@ -46,20 +37,20 @@ repositories {
     maven("https://repo.xenondevs.xyz/releases") {
         name = "InvUI"
     }
+
+    maven("https://repo.codemc.io/repository/maven-releases/") {
+        name = "CodeMC"
+    }
 }
 
 dependencies {
     compileOnly(kotlin("stdlib"))
 
-    compileOnly("io.papermc.paper:paper-api:$minecraftVersion-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:$minecraftVersion.build.+")
     compileOnly("io.github.pylonmc:rebar:$rebarVersion")
     compileOnly("io.github.pylonmc:pylon:$pylonVersion")
-}
 
-configurations {
-    named("datagenImplementation") { extendsFrom(implementation.get()) }
-    named("datagenCompileOnly") { extendsFrom(compileOnly.get()) }
-    named("datagenRuntimeOnly") { extendsFrom(runtimeOnly.get()) }
+    implementation("com.github.glomdom:rebar-datagen:$datagenVersion")
 }
 
 idea {
@@ -70,31 +61,12 @@ idea {
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 
     compilerOptions {
         javaParameters = true
         jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
         freeCompilerArgs = listOf("-Xwhen-guards")
-    }
-}
-
-val runDatagen = tasks.register<JavaExec>("runDatagen") {
-    group = "datagen"
-    description = "Generates resource files for Gantry"
-
-    classpath = sourceSets["datagen"].runtimeClasspath
-    mainClass = "me.glomdom.gantry.datagen.MainKt"
-
-    val outDir = generatedResourcesDir.get().asFile
-    outputs.dir(outDir)
-
-    args(outDir.absolutePath)
-}
-
-sourceSets {
-    main {
-        resources.srcDir(runDatagen)
     }
 }
 
@@ -126,6 +98,10 @@ paper {
     authors = listOf("glomdom")
     apiVersion = minecraftVersion
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP
+}
+
+tasks.runDatagen {
+    mainClass.set("me.glomdom.gantry.datagen.DatagenKt")
 }
 
 tasks.runServer {

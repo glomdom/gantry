@@ -3,13 +3,6 @@
 import me.glomdom.gantry.utils.GantryUtils.gantryKey
 
 object GantryKeys {
-    val ROUGH_PRESS_FORM = gantryKey("rough_press_form")
-    val SPENT_ROUGH_FORM = gantryKey("spent_rough_form")
-
-    val ROUGH_ROLLED_STRIP_FORM = gantryKey("rough_rolled_strip_form")
-    val ROUGH_ROD_FORM = gantryKey("rough_rod_form")
-    val ROUGH_FASTENER_PACK_FORM = gantryKey("rough_fastener_pack_form")
-
     val ROUGH_IRON_ROD = gantryKey("rough_iron_rod")
     val ROUGH_IRON_ROLLED_STRIP = gantryKey("rough_iron_rolled_strip")
     val ROUGH_FASTENER_PACK = gantryKey("rough_fastener_pack")
@@ -22,8 +15,7 @@ object GantryKeys {
     val IRON_SCRAP = gantryKey("iron_scrap")
     val BARK = gantryKey("bark")
 
-    val HYDRAULIC_FORMING_PRESS = gantryKey("hydraulic_forming_press")
-    val HYDRAULIC_DEBARKER = gantryKey("hydraulic_debarker")
+    val COAL_POWERED_PRESS = gantryKey("coal_powered_press")
 
     val PYROLYSIS_OVEN_CONTROLLER = gantryKey("pyrolysis_oven_controller")
 
