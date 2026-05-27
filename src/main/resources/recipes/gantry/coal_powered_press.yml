@@ -1,5 +1,6 @@
-﻿gantry:steel_ingot_to_sheet:
-  input: pylon:steel_ingot
-  output: pylon:steel_sheet
-  recipe-ticks: 100
+﻿gantry:steel_ingot_to_plate:
+  input:
+    pylon:steel_ingot: 2
+  output: gantry:steel_plate
+  recipe-ticks: 250
   fuel-per-tick: 2
