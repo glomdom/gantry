@@ -118,7 +118,7 @@ class CoalPoweredPress :
             if (!tryConsumeFuel() || fuelLeft < fuelCost) return
         }
 
-        fuelLeft -= (fuelLeft - fuelCost).coerceAtLeast(0.0)
+        fuelLeft = (fuelLeft - fuelCost).coerceAtLeast(0.0)
         progressRecipe(tickInterval)
     }
 
@@ -161,7 +161,8 @@ class CoalPoweredPress :
     }
 
     private fun tryStartRecipe(recipe: CoalPoweredPressRecipe, input: ItemStack): Boolean {
-        if (recipe.input != input || !outputInventory.canHold(recipe.output)) return false
+        if (!recipe.input.isSimilar(input) || input.amount < recipe.input.amount) return false
+        if (!outputInventory.canHold(recipe.output)) return false
         if (fuelLeft == 0.0) return false
 
         startRecipe(recipe, recipe.recipeTicks)

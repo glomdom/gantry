@@ -10,22 +10,8 @@ gui:
   fuel_input: "Fuel Input"
 
 item:
-  rough_press_form:
-    name: "Rough Press Form"
-  spent_rough_form:
-    name: "Spent Rough Form"
-  rough_rolled_strip_form:
-    name: "Rough Rolled Strip Form"
-  rough_rod_form:
-    name: "Rough Rod Form"
-  rough_fastener_pack_form:
-    name: "Rough Fastener Pack Form"
-  rough_iron_rod:
-    name: "Rough Iron Rod"
-  rough_iron_rolled_strip:
-    name: "Rough Iron Rolled Strip"
-  rough_fastener_pack:
-    name: "Rough Fastener Pack"
+  steel_plate:
+    name: "Steel Plate"
   iron_scrap:
     name: "Iron Scrap"
   bark:
