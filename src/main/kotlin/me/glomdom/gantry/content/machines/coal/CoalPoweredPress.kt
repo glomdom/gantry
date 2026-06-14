@@ -113,9 +113,12 @@ class CoalPoweredPress :
         if (!isProcessingRecipe) return
 
         val recipe = currentRecipe ?: return
-        if (fuelLeft < (recipe.fuelPerTick * tickInterval)) return
+        val fuelCost = (recipe.fuelPerTick * tickInterval).toDouble()
+        if (fuelLeft < fuelCost) {
+            if (!tryConsumeFuel() || fuelLeft < fuelCost) return
+        }
 
-        fuelLeft -= (recipe.fuelPerTick * tickInterval);
+        fuelLeft -= (fuelLeft - fuelCost).coerceAtLeast(0.0)
         progressRecipe(tickInterval)
     }
 
@@ -174,10 +177,13 @@ class CoalPoweredPress :
         if (!itemType.isFuel) return false
 
         val burnDuration = itemType.burnDuration.toDouble()
-        if (fuelLeft + burnDuration > fuelBuffer) return false
+        val spaceLeftInBuffer = fuelBuffer - fuelLeft;
+        val maxItemsThatFit = (spaceLeftInBuffer / burnDuration).toInt()
+        val itemsToConsume = minOf(maxItemsThatFit, item.amount)
+        if (itemsToConsume <= 0) return false
 
-        fuelLeft += burnDuration
-        fuelInventory.setItem(MachineUpdateReason(), 0, item.subtract())
+        fuelLeft += burnDuration * itemsToConsume
+        fuelInventory.setItem(MachineUpdateReason(), 0, item.subtract(itemsToConsume))
 
         return true
     }
