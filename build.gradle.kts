@@ -10,8 +10,6 @@ plugins {
     id("com.gradleup.shadow") version "9.0.0"
     id("de.eldoria.plugin-yml.paper") version "0.9.0"
     id("xyz.jpenilla.run-paper") version "3.0.2"
-
-    id("com.glomdom.rebardatagen") version "0.0.6"
 }
 
 group = "me.glomdom"
@@ -20,7 +18,6 @@ version = "1.0-SNAPSHOT"
 val minecraftVersion = property("minecraft.version").toString()
 val rebarVersion = property("rebar.version").toString()
 val pylonVersion = property("pylon.version").toString()
-val datagenVersion = property("datagen.version").toString()
 
 repositories {
     mavenCentral()
@@ -49,8 +46,6 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:$minecraftVersion.build.+")
     compileOnly("io.github.pylonmc:rebar:$rebarVersion")
     compileOnly("io.github.pylonmc:pylon:$pylonVersion")
-
-    implementation("com.github.glomdom:rebar-datagen:$datagenVersion")
 }
 
 idea {
@@ -98,10 +93,6 @@ paper {
     authors = listOf("glomdom")
     apiVersion = minecraftVersion
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP
-}
-
-tasks.runDatagen {
-    mainClass.set("me.glomdom.gantry.datagen.DatagenKt")
 }
 
 tasks.runServer {

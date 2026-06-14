@@ -1,6 +1,6 @@
 ﻿package me.glomdom.gantry
 
-import me.glomdom.gantry.utils.GantryUtils.gantryKey
+import me.glomdom.gantry.utils.gantryKey
 
 object GantryKeys {
     val STEEL_PLATE = gantryKey("steel_plate")

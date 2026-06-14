@@ -2,7 +2,7 @@
 
 import io.github.pylonmc.rebar.content.guide.RebarGuide
 import io.github.pylonmc.rebar.guide.pages.base.SimpleStaticGuidePage
-import me.glomdom.gantry.utils.GantryUtils.gantryKey
+import me.glomdom.gantry.utils.gantryKey
 
 object GantryPages {
     val COAL_POWERED_MACHINES = SimpleStaticGuidePage(gantryKey("coal_powered_machines"))

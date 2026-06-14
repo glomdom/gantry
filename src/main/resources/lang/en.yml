@@ -1,0 +1,57 @@
+﻿addon: "Gantry"
+guide:
+  page:
+    coal_powered_machines: "Coal-Powered Machines"
+  recipe:
+    fuel_burning: "Fuel Burning"
+    coal_powered_pressing: "<attr>Fuel required:</attr> %fuel-ticks%"
+
+gui:
+  fuel_input: "Fuel Input"
+
+item:
+  rough_press_form:
+    name: "Rough Press Form"
+  spent_rough_form:
+    name: "Spent Rough Form"
+  rough_rolled_strip_form:
+    name: "Rough Rolled Strip Form"
+  rough_rod_form:
+    name: "Rough Rod Form"
+  rough_fastener_pack_form:
+    name: "Rough Fastener Pack Form"
+  rough_iron_rod:
+    name: "Rough Iron Rod"
+  rough_iron_rolled_strip:
+    name: "Rough Iron Rolled Strip"
+  rough_fastener_pack:
+    name: "Rough Fastener Pack"
+  iron_scrap:
+    name: "Iron Scrap"
+  bark:
+    name: "Bark"
+  crude_iron_frame_plate:
+    name: "Crude Iron Frame Plate"
+  fire_bricks:
+    name: "Fire Bricks"
+  fire_brick:
+    name: "Fire Brick"
+  coal_powered_press:
+    name: "Coal-Powered Press"
+    lore: |-
+      <arrow> Presses ingots into plates.
+      <arrow> Stronger than a hammer or a piston.
+
+  pyrolysis_oven_controller:
+    name: "Pyrolysis Oven"
+
+inventory:
+  fuel: Fuel
+
+unit:
+  fuel_ticks:
+    singular: "fuel tick"
+    plural: "fuel ticks"
+
+message:
+  no-fuel: "No fuel"

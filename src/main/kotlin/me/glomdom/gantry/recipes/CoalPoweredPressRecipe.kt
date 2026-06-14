@@ -12,7 +12,7 @@ import io.github.pylonmc.rebar.recipe.RecipeInput
 import io.github.pylonmc.rebar.util.gui.GuiItems
 import io.github.pylonmc.rebar.util.gui.unit.UnitFormat
 import me.glomdom.gantry.GantryItems
-import me.glomdom.gantry.utils.GantryUtils.gantryKey
+import me.glomdom.gantry.utils.gantryKey
 import me.glomdom.gantry.utils.extensions.FUEL
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
@@ -42,8 +42,8 @@ class CoalPoweredPressRecipe(
                 "# # # # # # # # #",
                 "# # # # # # # # #"
             )
-            .addIngredient('i', ItemButton(input))
-            .addIngredient('m', ItemButton(ItemStackBuilder.of(GantryItems.COAL_POWERED_PRESS).clearLore().build()))
+            .addIngredient('i', ItemButton.of(input))
+            .addIngredient('m', ItemButton.of(ItemStackBuilder.copyOf(GantryItems.COAL_POWERED_PRESS).clearLore().build()))
             .addIngredient(
                 'b',
                 GuiItems.progressCyclingItem(
@@ -58,7 +58,7 @@ class CoalPoweredPressRecipe(
                         )
                 )
             )
-            .addIngredient('o', ItemButton(output))
+            .addIngredient('o', ItemButton.of(output))
             .addIngredient('#', GuiItems.backgroundBlack())
             .build()
     }

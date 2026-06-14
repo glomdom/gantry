@@ -11,14 +11,17 @@ object GantryItems : GantryRegistry() {
         Material.FURNACE,
         GantryKeys.COAL_POWERED_PRESS,
         GantryPages.COAL_POWERED_MACHINES
-    ) {
-        asBlockItem()
-    }
+    ) { asBlockItem() }
 
     val STEEL_PLATE by simpleRebarItem(Material.GRAY_CARPET, GantryKeys.STEEL_PLATE, PylonPages.COMPONENTS)
 
     val FIRE_BRICK by simpleRebarItem(Material.BRICK, GantryKeys.FIRE_BRICK, PylonPages.COMPONENTS)
-    val FIRE_BRICKS by factoryItem<RebarItem>(Material.BRICKS, GantryKeys.FIRE_BRICKS, PylonPages.COMPONENTS) { asBlockItem() }
+    val FIRE_BRICKS by factoryItem<RebarItem>(
+        Material.BRICKS,
+        GantryKeys.FIRE_BRICKS,
+        PylonPages.COMPONENTS
+    ) { asBlockItem() }
+
     val PYROLYSIS_OVEN_CONTROLLER by factoryItem<RebarItem>(
         Material.FURNACE,
         GantryKeys.PYROLYSIS_OVEN_CONTROLLER,
