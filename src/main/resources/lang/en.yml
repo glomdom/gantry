@@ -27,6 +27,7 @@ item:
     lore: |-
       <arrow> Presses ingots into plates.
       <arrow> Stronger than a hammer or a piston.
+      <arrow> <attr>Fuel buffer:</attr> %fuel-buffer%
 
   pyrolysis_oven_controller:
     name: "Pyrolysis Oven"

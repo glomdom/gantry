@@ -1,6 +1,5 @@
 ﻿package me.glomdom.gantry.content.machines.coal
 
-import io.github.pylonmc.rebar.Rebar
 import io.github.pylonmc.rebar.block.RebarBlock
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
 import io.github.pylonmc.rebar.block.interfaces.DirectionalRebarBlock
@@ -10,6 +9,7 @@ import io.github.pylonmc.rebar.block.interfaces.TickingRebarBlock
 import io.github.pylonmc.rebar.block.interfaces.VirtualInventoryRebarBlock
 import io.github.pylonmc.rebar.config.adapter.ConfigAdapter
 import io.github.pylonmc.rebar.datatypes.RebarSerializers
+import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.RebarItem
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import io.github.pylonmc.rebar.util.DISALLOW_PLAYERS_FROM_ADDING_ITEMS_HANDLER
@@ -47,7 +47,7 @@ class CoalPoweredPress :
     private val inputInventory = VirtualInventory(1)
     private val fuelInventory = VirtualInventory(1)
     private val outputInventory = VirtualInventory(1)
-    private val fuelBuffer: Double = getSettingOrThrow("fuel-buffer", ConfigAdapter.DOUBLE)
+    private val fuelBuffer = getSettingOrThrow("fuel-buffer", ConfigAdapter.DOUBLE)
 
     private var fuelLeft: Double
 
@@ -67,7 +67,15 @@ class CoalPoweredPress :
             ?: throw IllegalStateException("Coal-Powered Press at ${block.location} cannot get data from pdc for key $FUEL_LEFT_KEY")
     }
 
-    class Item(stack: ItemStack) : RebarItem(stack)
+    class Item(stack: ItemStack) : RebarItem(stack) {
+        private val fuelBuffer = getSettingOrThrow("fuel-buffer", ConfigAdapter.DOUBLE)
+
+        override fun getPlaceholders(): List<RebarArgument> {
+            return listOf(
+                RebarArgument.of("fuel-buffer", UnitFormat.FUEL.format(fuelBuffer))
+            )
+        }
+    }
 
     override fun write(pdc: PersistentDataContainer) {
         pdc.set(FUEL_LEFT_KEY, RebarSerializers.DOUBLE, fuelLeft)
@@ -87,6 +95,7 @@ class CoalPoweredPress :
         fuelInventory.addPostUpdateHandler { event ->
             if (event.updateReason !is MachineUpdateReason) {
                 tryConsumeFuel()
+                tryStartRecipe()
             }
         }
     }
@@ -112,11 +121,11 @@ class CoalPoweredPress :
     override fun tick() {
         if (!isProcessingRecipe) return
 
+        tryConsumeFuel()
+
         val recipe = currentRecipe ?: return
         val fuelCost = (recipe.fuelPerTick * tickInterval).toDouble()
-        if (fuelLeft < fuelCost) {
-            if (!tryConsumeFuel() || fuelLeft < fuelCost) return
-        }
+        if (fuelLeft < fuelCost) return
 
         fuelLeft = (fuelLeft - fuelCost).coerceAtLeast(0.0)
         progressRecipe(tickInterval)
