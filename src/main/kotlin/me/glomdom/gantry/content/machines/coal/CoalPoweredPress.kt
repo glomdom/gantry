@@ -8,7 +8,6 @@ import io.github.pylonmc.rebar.block.interfaces.RecipeProcessorRebarBlock
 import io.github.pylonmc.rebar.block.interfaces.TickingRebarBlock
 import io.github.pylonmc.rebar.block.interfaces.VirtualInventoryRebarBlock
 import io.github.pylonmc.rebar.config.adapter.ConfigAdapter
-import io.github.pylonmc.rebar.datatypes.RebarSerializers
 import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.RebarItem
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
@@ -19,14 +18,13 @@ import io.github.pylonmc.rebar.util.gui.GuiItems
 import io.github.pylonmc.rebar.util.gui.ProgressItem
 import io.github.pylonmc.rebar.util.gui.unit.UnitFormat
 import io.github.pylonmc.rebar.waila.WailaDisplay
+import me.glomdom.gantry.block.interfaces.CoalPoweredMachine
 import me.glomdom.gantry.recipes.CoalPoweredPressRecipe
 import me.glomdom.gantry.utils.DISALLOW_NON_FUEL_ITEMS_TO_BE_ADDED
 import me.glomdom.gantry.utils.extensions.FUEL
 import me.glomdom.gantry.utils.extensions.fuelInput
-import me.glomdom.gantry.utils.gantryKey
+import me.glomdom.gantry.utils.extensions.fuelRemainingTicks
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.ComponentLike
-import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -42,30 +40,25 @@ class CoalPoweredPress :
     DirectionalRebarBlock,
     VirtualInventoryRebarBlock,
     TickingRebarBlock,
-    RecipeProcessorRebarBlock<CoalPoweredPressRecipe> {
+    RecipeProcessorRebarBlock<CoalPoweredPressRecipe>,
+    CoalPoweredMachine {
 
     private val inputInventory = VirtualInventory(1)
-    private val fuelInventory = VirtualInventory(1)
     private val outputInventory = VirtualInventory(1)
-    private val fuelBuffer = getSettingOrThrow("fuel-buffer", ConfigAdapter.DOUBLE)
-
-    private var fuelLeft: Double
+    override val fuelInventory = VirtualInventory(1)
+    override val fuelBuffer = getSettingOrThrow("fuel-buffer", ConfigAdapter.DOUBLE)
 
     @Suppress("Unused")
     constructor(block: Block, context: BlockCreateContext) : super(block, context) {
         facing = context.facing
-        setTickInterval(5)
         recipeProgressItem = ProgressItem(GuiItems.background())
-        setRecipeType(CoalPoweredPressRecipe.RECIPE_TYPE)
 
-        fuelLeft = 0.0
+        setTickInterval(5)
+        setRecipeType(CoalPoweredPressRecipe.RECIPE_TYPE)
     }
 
     @Suppress("Unused")
-    constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc) {
-        fuelLeft = pdc.get(FUEL_LEFT_KEY, RebarSerializers.DOUBLE)
-            ?: throw IllegalStateException("Coal-Powered Press at ${block.location} cannot get data from pdc for key $FUEL_LEFT_KEY")
-    }
+    constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc)
 
     class Item(stack: ItemStack) : RebarItem(stack) {
         private val fuelBuffer = getSettingOrThrow("fuel-buffer", ConfigAdapter.DOUBLE)
@@ -75,10 +68,6 @@ class CoalPoweredPress :
                 RebarArgument.of("fuel-buffer", UnitFormat.FUEL.format(fuelBuffer))
             )
         }
-    }
-
-    override fun write(pdc: PersistentDataContainer) {
-        pdc.set(FUEL_LEFT_KEY, RebarSerializers.DOUBLE, fuelLeft)
     }
 
     override fun postInitialise() {
@@ -158,7 +147,7 @@ class CoalPoweredPress :
     fun tryStartRecipe() {
         if (isProcessingRecipe) return
 
-        val stack = inputInventory[0];
+        val stack = inputInventory[0]
         if (stack == null || stack.isEmpty) return
         if (lastRecipe?.let { tryStartRecipe(it, stack) } == true) return
 
@@ -180,35 +169,4 @@ class CoalPoweredPress :
 
         return true
     }
-
-    private fun tryConsumeFuel(): Boolean {
-        val item = fuelInventory[0] ?: return false
-        val itemType = item.type.asItemType() ?: return false
-        if (!itemType.isFuel) return false
-
-        val burnDuration = itemType.burnDuration.toDouble()
-        val spaceLeftInBuffer = fuelBuffer - fuelLeft;
-        val maxItemsThatFit = (spaceLeftInBuffer / burnDuration).toInt()
-        val itemsToConsume = minOf(maxItemsThatFit, item.amount)
-        if (itemsToConsume <= 0) return false
-
-        fuelLeft += burnDuration * itemsToConsume
-        fuelInventory.setItem(MachineUpdateReason(), 0, item.subtract(itemsToConsume))
-
-        return true
-    }
-
-    companion object {
-        val FUEL_LEFT_KEY = gantryKey("fuel_left")
-    }
-}
-
-private fun ProgressBar.Companion.fuelRemainingTicks(total: Int, remaining: Int): ComponentLike {
-    return ProgressBar()
-        .barColor(TextColor.fromHexString("#e4b09f")!!)
-        .proportion(remaining.toDouble() / total.toDouble())
-        .suffix(
-            Component.text(" ")
-                .append(UnitFormat.FUEL.format(remaining))
-        )
 }

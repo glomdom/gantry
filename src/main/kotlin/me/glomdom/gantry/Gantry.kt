@@ -1,6 +1,8 @@
 package me.glomdom.gantry
 
 import io.github.pylonmc.rebar.addon.RebarAddon
+import me.glomdom.gantry.block.interfaces.CoalPoweredMachine
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.Locale
@@ -13,7 +15,12 @@ class Gantry : JavaPlugin(), RebarAddon {
     override fun onEnable() {
         instance = this
 
+        val pm = Bukkit.getPluginManager()
+
         registerWithRebar()
+
+        pm.registerEvents(CoalPoweredMachine, this)
+
         GantryItems.registerAll()
         GantryBlocks.registerAll()
         GantryPages.initialize()
