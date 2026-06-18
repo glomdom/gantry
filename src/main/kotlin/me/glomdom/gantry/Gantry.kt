@@ -23,6 +23,7 @@ class Gantry : JavaPlugin(), RebarAddon {
 
         GantryItems.registerAll()
         GantryBlocks.registerAll()
+        GantryFluids.registerAll()
         GantryPages.initialize()
         GantryRecipes.registerAll()
     }

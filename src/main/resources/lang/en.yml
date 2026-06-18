@@ -2,6 +2,7 @@
 guide:
   page:
     coal_powered_machines: "Coal-Powered Machines"
+    deep_sludge_processing: "Deep Sludge Processing"
   recipe:
     fuel_burning: "Fuel Burning"
     coal_powered_pressing: "<attr>Fuel required:</attr> %fuel-ticks%"
@@ -12,6 +13,9 @@ gui:
 item:
   steel_plate:
     name: "Steel Plate"
+  steel_chain:
+    name: "Steel Chain"
+
   iron_scrap:
     name: "Iron Scrap"
   bark:
@@ -25,12 +29,33 @@ item:
   coal_powered_press:
     name: "Coal-Powered Press"
     lore: |-
-      <arrow> Presses ingots into plates.
-      <arrow> Stronger than a hammer or a piston.
+      <arrow> Presses materials into various forms, stronger than a hammer or a piston
       <arrow> <attr>Fuel buffer:</attr> %fuel-buffer%
 
   pyrolysis_oven_controller:
     name: "Pyrolysis Oven"
+
+  raw_zinc:
+    name: "Raw Zinc"
+  raw_nickel:
+    name: "Raw Nickel"
+  raw_invar:
+    name: "Raw Invar"
+
+  deep_sludge_pump:
+    name: "Deep Sludge Pump"
+    lore: |-
+      <star> Multiblock
+      <arrow> Consumes diesel and water to pump deep sludge from bedrock
+      
+      <u>Components</u>
+      <diamond> 1x <yellow><item:gantry:deep_sludge_pump></yellow>
+      <diamond> 1x <yellow><item:pylon:fluid_output_hatch></yellow>
+      <diamond> 2x <yellow><item:pylon:fluid_input_hatch></yellow>
+      <diamond> 3x <yellow><item:gantry:steel_chain></yellow>
+      <diamond> 4x <yellow><item:pylon:steel_block></yellow>
+      <diamond> 14x <yellow><item:pylon:steel_support_beam></yellow>
+      <diamond> 3x or more <yellow>Fluid Tank Casing</yellow>
 
 inventory:
   fuel: Fuel
@@ -39,6 +64,9 @@ unit:
   fuel_ticks:
     singular: "fuel tick"
     plural: "fuel ticks"
+
+fluid:
+  deep_sludge: "Deep Sludge"
 
 message:
   no-fuel: "No fuel"

@@ -1,10 +1,13 @@
 ﻿package me.glomdom.gantry.registry
 
 import io.github.pylonmc.rebar.block.RebarBlock
+import io.github.pylonmc.rebar.fluid.RebarFluid
+import io.github.pylonmc.rebar.fluid.tags.FluidTemperature
 import io.github.pylonmc.rebar.guide.pages.base.SimpleStaticGuidePage
 import io.github.pylonmc.rebar.item.RebarItem
 import io.github.pylonmc.rebar.item.builder.ItemStackBuilder
 import me.glomdom.gantry.content.item.GantryItemFactory
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
@@ -23,10 +26,32 @@ abstract class GantryRegistry {
         return ReadOnlyProperty { _, _ -> instance }
     }
 
+    protected fun rebarFluid(key: NamespacedKey, color: TextColor, material: Material, temp: FluidTemperature = FluidTemperature.NORMAL) =
+        entry(
+            registerAction = {
+                it.addTag(temp)
+                it.register()
+            },
+            builder = {
+                RebarFluid(key, color, material)
+            }
+        )
+
     protected fun simpleRebarItem(material: Material, key: NamespacedKey, page: SimpleStaticGuidePage) =
         entry(
             registerAction = { item ->
                 RebarItem.register(RebarItem::class.java, item)
+                page.addItem(item)
+            },
+            builder = {
+                ItemStackBuilder.rebar(material, key).build()
+            }
+        )
+
+    protected fun simpleRebarBlockItem(material: Material, key: NamespacedKey, page: SimpleStaticGuidePage) =
+        entry(
+            registerAction = { item ->
+                RebarItem.register(RebarItem::class.java, item, key)
                 page.addItem(item)
             },
             builder = {
