@@ -1,0 +1,4 @@
+﻿tick-interval: 3
+diesel-per-tick: 30
+water-per-tick: 10
+sludge-per-tick: 25
