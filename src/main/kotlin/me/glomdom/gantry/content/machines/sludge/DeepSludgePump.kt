@@ -4,15 +4,16 @@ import io.github.pylonmc.pylon.PylonFluids
 import io.github.pylonmc.pylon.PylonKeys
 import io.github.pylonmc.pylon.content.components.FluidInputHatch
 import io.github.pylonmc.pylon.content.components.FluidOutputHatch
-import io.github.pylonmc.pylon.content.components.ItemInputHatch
+import io.github.pylonmc.rebar.Rebar
 import io.github.pylonmc.rebar.block.RebarBlock
 import io.github.pylonmc.rebar.block.context.BlockCreateContext
 import io.github.pylonmc.rebar.block.interfaces.DirectionalRebarBlock
-import io.github.pylonmc.rebar.block.interfaces.ProcessorRebarBlock
 import io.github.pylonmc.rebar.block.interfaces.SimpleRebarMultiblock
 import io.github.pylonmc.rebar.block.interfaces.TickingRebarBlock
 import io.github.pylonmc.rebar.config.adapter.ConfigAdapter
+import io.github.pylonmc.rebar.i18n.RebarArgument
 import io.github.pylonmc.rebar.item.RebarItem
+import io.github.pylonmc.rebar.util.gui.unit.UnitFormat
 import me.glomdom.gantry.GantryFluids
 import me.glomdom.gantry.GantryKeys
 import org.bukkit.block.Block
@@ -23,26 +24,48 @@ import org.joml.Vector3i
 class DeepSludgePump : RebarBlock, DirectionalRebarBlock, SimpleRebarMultiblock,
     TickingRebarBlock {
 
-    val tickingInterval = getSettingOrThrow("tick-interval", ConfigAdapter.INTEGER)
-    val dieselPerTick = getSettingOrThrow("diesel-per-tick", ConfigAdapter.DOUBLE)
-    val waterPerTick = getSettingOrThrow("water-per-tick", ConfigAdapter.DOUBLE)
-    val sludgePerTick = getSettingOrThrow("sludge-per-tick", ConfigAdapter.DOUBLE)
+    private val tickingInterval = getSettingOrThrow("tick-interval", ConfigAdapter.INTEGER)
+    private val dieselPerTick = getSettingOrThrow("diesel-per-tick", ConfigAdapter.DOUBLE)
+    private val waterPerTick = getSettingOrThrow("water-per-tick", ConfigAdapter.DOUBLE)
+    private val sludgePerTick = getSettingOrThrow("sludge-per-tick", ConfigAdapter.DOUBLE)
 
-    val WATER_INPUT_HATCH = Vector3i(1, -3, -1)
-    val DIESEL_INPUT_HATCH = Vector3i(-1, -3, -1)
-    val DEEP_SLUDGE_OUTPUT = Vector3i(0, -3, -2)
+    private val WATER_INPUT_HATCH = Vector3i(1, -3, -1)
+    private val DIESEL_INPUT_HATCH = Vector3i(-1, -3, -1)
+    private val DEEP_SLUDGE_OUTPUT = Vector3i(0, -3, -2)
 
     @Suppress("Unused")
     constructor(block: Block, context: BlockCreateContext) : super(block, context) {
         facing = context.facing
-        setMultiblockDirection(context.facing)
         setTickInterval(tickingInterval)
+        setMultiblockDirection(context.facing)
     }
 
     @Suppress("Unused")
     constructor(block: Block, pdc: PersistentDataContainer) : super(block, pdc)
 
-    class Item(stack: ItemStack) : RebarItem(stack)
+    class Item(stack: ItemStack) : RebarItem(stack) {
+        private val tickingInterval = getSettingOrThrow("tick-interval", ConfigAdapter.INTEGER)
+        private val dieselPerTick = getSettingOrThrow("diesel-per-tick", ConfigAdapter.DOUBLE)
+        private val waterPerTick = getSettingOrThrow("water-per-tick", ConfigAdapter.DOUBLE)
+        private val sludgePerTick = getSettingOrThrow("sludge-per-tick", ConfigAdapter.DOUBLE)
+
+        override fun getPlaceholders(): List<RebarArgument> {
+            return listOf(
+                RebarArgument.of(
+                    "diesel-per-tick",
+                    UnitFormat.MILLIBUCKETS_PER_SECOND.format(dieselPerTick * (20 / tickingInterval))
+                ),
+                RebarArgument.of(
+                    "water-per-tick",
+                    UnitFormat.MILLIBUCKETS_PER_SECOND.format(waterPerTick * (20 / tickingInterval))
+                ),
+                RebarArgument.of(
+                    "sludge-per-tick",
+                    UnitFormat.MILLIBUCKETS_PER_SECOND.format(sludgePerTick * (20 / tickingInterval))
+                )
+            )
+        }
+    }
 
     override fun onMultiblockFormed() {
         super.onMultiblockFormed()
@@ -56,7 +79,7 @@ class DeepSludgePump : RebarBlock, DirectionalRebarBlock, SimpleRebarMultiblock,
         getMultiblockComponentOrThrow(
             FluidOutputHatch::class.java,
             DEEP_SLUDGE_OUTPUT
-        ).setFluidType(GantryFluids.DEEP_SLUDGE)
+        ).setFluidType(GantryFluids.RAW_SLUDGE)
     }
 
     override val components: Map<Vector3i, SimpleRebarMultiblock.MultiblockComponent>
@@ -100,20 +123,16 @@ class DeepSludgePump : RebarBlock, DirectionalRebarBlock, SimpleRebarMultiblock,
         val dieselInputHatch = getMultiblockComponentOrThrow(FluidInputHatch::class.java, DIESEL_INPUT_HATCH)
         val sludgeOutputHatch = getMultiblockComponentOrThrow(FluidOutputHatch::class.java, DEEP_SLUDGE_OUTPUT)
 
-        val waterToTake = waterPerTick * tickingInterval
-        val dieselToTake = dieselPerTick * tickingInterval
-        val sludgeToGive = sludgePerTick * tickingInterval
-
         if (
-            waterInputHatch.fluidAmount(PylonFluids.WATER) < waterToTake ||
-            dieselInputHatch.fluidAmount(PylonFluids.BIODIESEL) < dieselToTake ||
-            sludgeOutputHatch.fluidCapacity(GantryFluids.DEEP_SLUDGE) < sludgeOutputHatch.fluidAmount(GantryFluids.DEEP_SLUDGE) + sludgeToGive
+            waterInputHatch.fluidAmount(PylonFluids.WATER) < waterPerTick / tickInterval ||
+            dieselInputHatch.fluidAmount(PylonFluids.BIODIESEL) < dieselPerTick / tickInterval ||
+            sludgeOutputHatch.fluidCapacity(GantryFluids.RAW_SLUDGE) < sludgeOutputHatch.fluidAmount(GantryFluids.RAW_SLUDGE) + sludgePerTick / tickInterval
         ) {
             return
         }
 
-        sludgeOutputHatch.addFluid(sludgeToGive)
-        waterInputHatch.removeFluid(waterToTake)
-        dieselInputHatch.removeFluid(dieselToTake)
+        sludgeOutputHatch.addFluid(sludgePerTick / tickInterval)
+        waterInputHatch.removeFluid(waterPerTick / tickInterval)
+        dieselInputHatch.removeFluid(dieselPerTick / tickInterval)
     }
 }

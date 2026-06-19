@@ -46,7 +46,10 @@ item:
     name: "Deep Sludge Pump"
     lore: |-
       <star> Multiblock
-      <arrow> Consumes diesel and water to pump deep sludge from bedrock
+      <arrow> Consumes diesel and water to pump raw sludge from bedrock
+      <arrow> <attr>Diesel per tick:</attr> %diesel-per-tick%
+      <arrow> <attr>Water per tick:</attr> %water-per-tick%
+      <arrow> <attr>Raw sludge per tick:</attr> %sludge-per-tick%
       
       <u>Components</u>
       <diamond> 1x <yellow><item:gantry:deep_sludge_pump></yellow>
@@ -64,9 +67,13 @@ unit:
   fuel_ticks:
     singular: "fuel tick"
     plural: "fuel ticks"
+  buckets_per_tick:
+    singular: "bucket"
+    plural: "buckets"
+    abbr: "B/t"
 
 fluid:
-  deep_sludge: "Deep Sludge"
+  raw_sludge: "Raw Sludge"
 
 message:
   no-fuel: "No fuel"
