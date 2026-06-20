@@ -22,4 +22,5 @@ object GantryKeys {
     // MACHINES
     val COAL_POWERED_PRESS = gantryKey("coal_powered_press")
     val DEEP_SLUDGE_PUMP = gantryKey("deep_sludge_pump")
+    val SLUDGE_CLARIFIER = gantryKey("sludge_clarifier")
 }

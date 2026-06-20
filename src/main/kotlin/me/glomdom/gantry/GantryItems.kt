@@ -1,9 +1,11 @@
 ﻿package me.glomdom.gantry
 
+import io.github.pylonmc.pylon.PylonItems
 import io.github.pylonmc.pylon.PylonPages
 import io.github.pylonmc.rebar.item.RebarItem
 import me.glomdom.gantry.content.machines.coal.CoalPoweredPress
 import me.glomdom.gantry.content.machines.sludge.DeepSludgePump
+import me.glomdom.gantry.content.machines.sludge.SludgeClarifier
 import me.glomdom.gantry.registry.GantryRegistry
 import org.bukkit.Material
 
@@ -37,6 +39,12 @@ object GantryItems : GantryRegistry() {
     val DEEP_SLUDGE_PUMP by factoryItem<DeepSludgePump.Item>(
         Material.NETHERITE_BLOCK,
         GantryKeys.DEEP_SLUDGE_PUMP,
+        GantryPages.DEEP_SLUDGE_PROCESSING
+    ) { asBlockItem() }
+
+    val SLUDGE_CLARIFIER by factoryItem<SludgeClarifier.Item>(
+        Material.NETHERITE_BLOCK,
+        GantryKeys.SLUDGE_CLARIFIER,
         GantryPages.DEEP_SLUDGE_PROCESSING
     ) { asBlockItem() }
 }

@@ -26,7 +26,12 @@ abstract class GantryRegistry {
         return ReadOnlyProperty { _, _ -> instance }
     }
 
-    protected fun rebarFluid(key: NamespacedKey, color: TextColor, material: Material, temp: FluidTemperature = FluidTemperature.NORMAL) =
+    protected fun rebarFluid(
+        key: NamespacedKey,
+        color: TextColor,
+        material: Material,
+        temp: FluidTemperature = FluidTemperature.NORMAL
+    ) =
         entry(
             registerAction = {
                 it.addTag(temp)
@@ -80,20 +85,25 @@ abstract class GantryRegistry {
         key: NamespacedKey,
         page: SimpleStaticGuidePage,
         crossinline builderBlock: GantryItemFactory.() -> GantryItemFactory = { this }
+    ): ReadOnlyProperty<Any?, ItemStack> =
+        factoryItem<TItem>(GantryItemFactory.create(material, key, page), key, page, builderBlock)
+
+    protected inline fun <reified TItem : RebarItem> factoryItem(
+        factory: GantryItemFactory,
+        key: NamespacedKey,
+        page: SimpleStaticGuidePage,
+        crossinline builderBlock: GantryItemFactory.() -> GantryItemFactory = { this }
     ): ReadOnlyProperty<Any?, ItemStack> {
-        val factory = GantryItemFactory.create(material, key, page).builderBlock()
+        val built = factory.builderBlock()
 
         return entry(
-            builder = {
-                factory.build<TItem>()
-            },
+            builder = { built.build() },
             registerAction = { item ->
-                if (factory.isBlockItem()) {
+                if (built.isBlockItem()) {
                     RebarItem.register(TItem::class.java, item, key)
                 } else {
                     RebarItem.register(TItem::class.java, item)
                 }
-
                 page.addItem(item)
             }
         )

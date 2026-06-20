@@ -124,15 +124,15 @@ class DeepSludgePump : RebarBlock, DirectionalRebarBlock, SimpleRebarMultiblock,
         val sludgeOutputHatch = getMultiblockComponentOrThrow(FluidOutputHatch::class.java, DEEP_SLUDGE_OUTPUT)
 
         if (
-            waterInputHatch.fluidAmount(PylonFluids.WATER) < waterPerTick / tickInterval ||
-            dieselInputHatch.fluidAmount(PylonFluids.BIODIESEL) < dieselPerTick / tickInterval ||
-            sludgeOutputHatch.fluidCapacity(GantryFluids.RAW_SLUDGE) < sludgeOutputHatch.fluidAmount(GantryFluids.RAW_SLUDGE) + sludgePerTick / tickInterval
+            waterInputHatch.fluidAmount(PylonFluids.WATER) < waterPerTick ||
+            dieselInputHatch.fluidAmount(PylonFluids.BIODIESEL) < dieselPerTick ||
+            sludgeOutputHatch.fluidCapacity(GantryFluids.RAW_SLUDGE) < sludgeOutputHatch.fluidAmount(GantryFluids.RAW_SLUDGE) + sludgePerTick
         ) {
             return
         }
 
-        sludgeOutputHatch.addFluid(sludgePerTick / tickInterval)
-        waterInputHatch.removeFluid(waterPerTick / tickInterval)
-        dieselInputHatch.removeFluid(dieselPerTick / tickInterval)
+        waterInputHatch.removeFluid(waterPerTick)
+        dieselInputHatch.removeFluid(dieselPerTick)
+        sludgeOutputHatch.addFluid(sludgePerTick)
     }
 }

@@ -8,9 +8,10 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 
 class GantryItemFactory private constructor(
-    private val material: Material,
     private val key: NamespacedKey,
     private val page: SimpleStaticGuidePage,
+    private val material: Material? = null,
+    private val customStack: ItemStack? = null,
 ) {
     private var durability: Int? = null
     private var blockItem: Boolean = false
@@ -23,8 +24,11 @@ class GantryItemFactory private constructor(
         blockItem = true
     }
 
-    fun <TItem : RebarItem> build(): ItemStack {
-        val builder = ItemStackBuilder.rebar(material, key)
+    fun build(): ItemStack {
+        // Use the custom stack directly if one was supplied.
+        customStack?.let { return it }
+
+        val builder = ItemStackBuilder.rebar(material!!, key)
         durability?.let(builder::durability)
 
         return builder.build()
@@ -37,6 +41,12 @@ class GantryItemFactory private constructor(
             material: Material,
             key: NamespacedKey,
             page: SimpleStaticGuidePage,
-        ) = GantryItemFactory(material, key, page)
+        ) = GantryItemFactory(key, page, material = material)
+
+        fun of(
+            stack: ItemStack,
+            key: NamespacedKey,
+            page: SimpleStaticGuidePage,
+        ) = GantryItemFactory(key, page, customStack = stack)
     }
 }
